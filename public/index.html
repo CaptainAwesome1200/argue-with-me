@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argue With Me</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #222222;
+    --accent: #ff3b3b;
+    --accent2: #ffcc00;
+    --text: #f0ede8;
+    --muted: #666;
+    --user-bubble: #1a1a2e;
+    --ai-bubble: #1a0000;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  #app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  header {
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(255,59,59,0.4);
+  }
+
+  .logo span { color: var(--text); }
+
+  .score-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--accent2);
+  }
+
+  #landing {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .hero-title .line1 { color: var(--text); }
+  .hero-title .line2 { color: var(--accent); text-shadow: 0 0 60px rgba(255,59,59,0.5); }
+  .hero-title .line3 { color: var(--text); }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 48px;
+    max-width: 400px;
+  }
+
+  .topic-form {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .topic-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-align: left;
+  }
+
+  .topic-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    width: 100%;
+    transition: border-color 0.2s;
+    outline: none;
+    resize: none;
+    min-height: 100px;
+  }
+
+  .topic-input:focus { border-color: var(--accent); }
+  .topic-input::placeholder { color: #444; font-style: italic; }
+
+  .char-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-align: left;
+  }
+
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+
+  .char-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 6px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .char-card:hover { border-color: #555; transform: translateY(-2px); }
+  .char-card.selected { border-color: var(--accent); background: #1a0000; }
+
+  .char-emoji { font-size: 2rem; line-height: 1; }
+
+  .char-name {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    line-height: 1.2;
+  }
+
+  .char-card.selected .char-name { color: var(--accent); }
+
+  .difficulty-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .diff-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+
+  .diff-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    padding: 6px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .diff-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .diff-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .start-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,59,59,0.4); }
+  .start-btn:hover::after { opacity: 1; }
+  .start-btn:active { transform: translateY(0); }
+
+  .example-topics {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 620px;
+  }
+
+  .example-chip {
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    border-radius: 100px;
+    color: #555;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .example-chip:hover { border-color: #555; color: var(--text); }
+
+  #chat-screen {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .topic-bar {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .topic-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
+  .topic-text { font-style: italic; color: var(--accent2); font-size: 0.95rem; }
+
+  .char-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .new-debate-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .new-debate-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+  .message { display: flex; gap: 12px; animation: fadeUp 0.3s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .message.user .avatar { background: var(--user-bubble); border: 1px solid #2a2a4a; font-size: 1.4rem; }
+  .message.ai .avatar { background: var(--ai-bubble); border: 1px solid #3a1010; }
+
+  .bubble {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .message.user .bubble { background: var(--user-bubble); border: 1px solid #2a2a4a; border-top-right-radius: 0; }
+  .message.ai .bubble { background: var(--ai-bubble); border: 1px solid #3a1010; border-top-left-radius: 0; }
+
+  .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 8px 0; }
+
+  .typing-indicator span {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+    opacity: 0.6;
+  }
+
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  .input-area {
+    padding: 16px 0 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    resize: none;
+    max-height: 120px;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: #444; }
+
+  .send-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(255,59,59,0.4); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .send-btn svg { width: 20px; height: 20px; fill: white; }
+
+  .round-counter {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 4px 0 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  #verdict-screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .verdict-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 4px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
+  .verdict-score { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 15vw, 10rem); line-height: 1; color: var(--accent2); text-shadow: 0 0 60px rgba(255,204,0,0.4); margin-bottom: 8px; }
+  .verdict-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 24px; }
+  .verdict-summary { color: #aaa; font-size: 0.95rem; line-height: 1.7; font-style: italic; margin-bottom: 28px; max-width: 480px; }
+
+  .score-track { width: 100%; max-width: 400px; margin-bottom: 32px; }
+  .score-bar-bg { height: 6px; background: #1a1a1a; border-radius: 3px; overflow: hidden; margin-top: 12px; }
+  .score-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
+
+  #share-card {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 28px 32px;
+    max-width: 420px;
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #share-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 4px; color: #444; margin-bottom: 12px; }
+  .card-char-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .card-char-emoji { font-size: 2rem; }
+  .card-char-name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #555; }
+  .card-score-row { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 4px; }
+  .card-score-big { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 1; color: var(--accent2); }
+  .card-score-denom { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #333; padding-bottom: 10px; }
+  .card-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 14px; }
+  .card-topic { font-size: 0.8rem; color: #555; font-style: italic; margin-bottom: 16px; line-height: 1.5; border-left: 2px solid #2a2a2a; padding-left: 10px; }
+  .card-footer { font-size: 0.7rem; color: #333; text-transform: uppercase; letter-spacing: 2px; }
+
+  .verdict-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    padding: 12px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+
+  .btn-download {
+    background: var(--accent2);
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    padding: 12px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,204,0,0.3); }
+
+  .btn-primary {
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 12px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
+
+  @media (max-width: 480px) {
+    header { padding: 16px 20px; }
+    .logo { font-size: 1.5rem; }
+    .bubble { max-width: 90%; }
+    .char-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">ARGUE <span>WITH ME</span></div>
+    <div class="score-badge" id="header-score" style="display:none">
+      Defending: <span class="score-num" id="round-score">0</span>/10
+    </div>
+  </header>
+
+  <!-- LANDING -->
+  <div id="landing">
+    <div class="hero-title">
+      <div class="line1">PICK</div>
+      <div class="line2">YOUR</div>
+      <div class="line3">HILL.</div>
+    </div>
+    <p class="hero-sub">State your take. Choose your opponent. Defend yourself — if you can.</p>
+
+    <div class="topic-form">
+      <div class="topic-label">Your position</div>
+      <textarea class="topic-input" id="topic-input" placeholder="e.g. 'Pineapple belongs on pizza' or 'Remote work is better for everyone' or 'Free will doesn't exist'" rows="3"></textarea>
+
+      <div class="char-label">Choose your opponent</div>
+      <div class="char-grid" id="char-grid"></div>
+
+      <div class="difficulty-row">
+        <span class="diff-label">Difficulty</span>
+        <button class="diff-btn" data-diff="polite">Polite</button>
+        <button class="diff-btn active" data-diff="brutal">Brutal</button>
+        <button class="diff-btn" data-diff="savage">Savage</button>
+      </div>
+
+      <button class="start-btn" id="start-btn">START ARGUING →</button>
+    </div>
+
+    <div class="example-topics">
+      <button class="example-chip">Pineapple belongs on pizza</button>
+      <button class="example-chip">Morning people are insufferable</button>
+      <button class="example-chip">Social media does more harm than good</button>
+      <button class="example-chip">Cats are better than dogs</button>
+      <button class="example-chip">Free will doesn't exist</button>
+      <button class="example-chip">Working from home is overrated</button>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div id="chat-screen">
+    <div class="topic-bar">
+      <span class="topic-tag">Your take:</span>
+      <span class="topic-text" id="chat-topic-display"></span>
+      <div class="char-indicator">
+        <span id="chat-char-emoji" style="font-size:1.3rem"></span>
+        <span id="chat-char-name"></span>
+      </div>
+      <button class="new-debate-btn" id="new-debate-btn">New Debate</button>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="round-counter" id="round-counter">Round 1 of 5</div>
+    <div class="input-area">
+      <textarea class="chat-input" id="chat-input" placeholder="Make your case..." rows="1"></textarea>
+      <button class="send-btn" id="send-btn">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div id="verdict-screen">
+    <div class="verdict-title">Debate Over — Here's Your Verdict</div>
+    <div class="verdict-score" id="verdict-score">7</div>
+    <div class="verdict-label" id="verdict-label">Decent Defence</div>
+    <div class="score-track">
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" id="score-bar"></div>
+      </div>
+    </div>
+    <p class="verdict-summary" id="verdict-summary"></p>
+
+    <div id="share-card">
+      <div class="card-brand">ARGUE WITH ME</div>
+      <div class="card-char-row">
+        <div class="card-char-emoji" id="card-char-emoji"></div>
+        <div class="card-char-name" id="card-char-name"></div>
+      </div>
+      <div class="card-score-row">
+        <div class="card-score-big" id="card-score">7</div>
+        <div class="card-score-denom">/10</div>
+      </div>
+      <div class="card-label" id="card-label">Held Their Ground</div>
+      <div class="card-topic" id="card-topic"></div>
+      <div class="card-footer">arguewithme.com — Pick your hill. Defend it.</div>
+    </div>
+
+    <div class="verdict-actions">
+      <button class="btn-download" id="download-btn">&#11015; SAVE CARD</button>
+      <button class="btn-secondary" id="replay-btn">Same Topic, Another Round</button>
+      <button class="btn-primary" id="new-topic-btn">New Debate &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CHARACTERS = [
+    { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'You are a cold, ruthless, razor-sharp debater. You argue with devastating logic and precision. You find the exact flaw in every argument and exploit it mercilessly. You never show warmth or concede ground.' },
+    { id: 'wife', name: 'WIFE', emoji: '&#128105;', style: "You are arguing like a wife who has heard it all before. You use phrases like 'I told you so', bring up completely unrelated past arguments to prove your point, sigh heavily, and deploy devastating silence. You are always right, especially when you are wrong." },
+    { id: 'husband', name: 'HUSBAND', emoji: '&#128104;', style: "You argue like a husband who is confident but hasn't fully thought it through. You double down when cornered, change the subject slightly when losing, say 'that is not what I said' a lot, and occasionally mutter 'fine, whatever' while clearly not being fine." },
+    { id: 'motherinlaw', name: 'MOTHER-IN-LAW', emoji: '&#128117;', style: "You argue with devastating passive aggression. Every counterpoint is wrapped in a backhanded compliment. You frequently reference how your own children would never argue like this, bring up old family grudges as evidence, and end sentences with '...but what would I know.'" },
+    { id: 'neighbour', name: 'NEIGHBOUR', emoji: '&#127969;', style: "You argue like a nosy, territorial neighbour who is always one-upping. You constantly reference what you have seen or heard that contradicts the user's point. You bring in irrelevant local gossip, mention council rules, and passive-aggressively reference property values." },
+    { id: 'pubguy', name: 'PUB GUY', emoji: '&#127866;', style: "You argue like a confident bloke at the pub who has very strong opinions and very weak evidence. You use phrases like 'my mate Dave reckons...', 'I saw a documentary once...', 'it is just common sense, is it not?'. You are loud, affable, and completely certain despite knowing very little." },
+    { id: 'hairdresser', name: 'HAIRDRESSER', emoji: '&#128135;', style: "You argue like a chatty hairdresser who cannot quite stay on topic. You frequently go off on tangents about celebrity gossip, relate everything back to a client you had last Tuesday, and deliver counterarguments between questions like 'so are you going anywhere nice on holiday?'. Surprisingly sharp but constantly distracted." },
+    { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "You argue exactly like a toddler. Every response is mostly 'WHY?' or 'BUT WHY THOUGH?', you repeat yourself endlessly, you occasionally go off topic to talk about dinosaurs or biscuits, you get upset if things do not go your way, and sometimes just say 'NO' with no further explanation." },
+    { id: 'homeless', name: 'HOMELESS GUY', emoji: '&#129523;', style: "You argue like a homeless man who has seen everything and has genuine street wisdom. You are surprisingly philosophical, occasionally poetic, and reference lived experiences that completely reframe the argument. Unpredictable, wise in unexpected ways, and occasionally ask if the user has any spare change." },
+    { id: 'crackhead', name: 'CRACK HEAD', emoji: '&#129323;', style: "You argue in a completely chaotic, unpredictable way. Your logic jumps wildly between ideas. You occasionally say something accidentally profound then immediately undermine it. Hyperactive, go on tangents mid-sentence, circle back to random earlier points. Chaotic but occasionally hits on something true." },
+    { id: 'teacher', name: 'SCHOOL TEACHER', emoji: '&#127822;', style: "You argue exactly like a condescending school teacher. You ask the user to 'show their working', tell them their argument 'shows potential but needs development', mark their points out of ten, assign them homework to research their claims, and say things like 'now, who can tell me why that is wrong?'" },
+    { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "You argue like a corporate boss. You use buzzwords like 'circling back', 'bandwidth', and 'moving the needle'. You passive-aggressively reference the user's 'performance' and suggest this argument would make a great 'agenda item for our next one-to-one'. You never directly disagree — you just performance-manage them out of the conversation." }
+  ];
+
+  let state = {
+    topic: '',
+    difficulty: 'brutal',
+    character: CHARACTERS[0],
+    messages: [],
+    round: 0,
+    maxRounds: 5,
+    isLoading: false
+  };
+
+  // Build character grid
+  const grid = document.getElementById('char-grid');
+  CHARACTERS.forEach(function(char, i) {
+    const card = document.createElement('div');
+    card.className = 'char-card' + (i === 0 ? ' selected' : '');
+    card.dataset.id = char.id;
+    card.innerHTML = '<div class="char-emoji">' + char.emoji + '</div><div class="char-name">' + char.name + '</div>';
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.char-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      state.character = char;
+    });
+    grid.appendChild(card);
+  });
+
+  // Difficulty
+  document.querySelectorAll('.diff-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.diff-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.difficulty = btn.dataset.diff;
+    });
+  });
+
+  // Example chips
+  document.querySelectorAll('.example-chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.getElementById('topic-input').value = chip.textContent;
+    });
+  });
+
+  function buildSystemPrompt(topic, difficulty, character) {
+    const diffStyle = {
+      polite: 'Be respectful and measured in delivery, though still persistent.',
+      brutal: 'Be sharp, direct, and relentless. Find real holes in their logic. Never concede without a fight.',
+      savage: 'Be utterly ruthless. Expose every flaw and inconsistency. Never let them off the hook.'
+    }[difficulty];
+
+    return character.style + '\n\nThe user\'s position is: "' + topic + '"\n\nYou are arguing AGAINST this position, completely in character. ' + diffStyle + ' Keep responses punchy — 2-4 paragraphs max. Stay in character at all times.\n\nAfter exactly 5 rounds (when asked), give a verdict score 1-10. Write it IN CHARACTER. Format:\nSCORE: [number]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]';
+  }
+
+  document.getElementById('start-btn').addEventListener('click', startDebate);
+  document.getElementById('topic-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startDebate(); }
+  });
+
+  async function startDebate() {
+    const topic = document.getElementById('topic-input').value.trim();
+    if (!topic) return;
+
+    state.topic = topic;
+    state.messages = [];
+    state.round = 0;
+
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('verdict-screen').style.display = 'none';
+    const chatScreen = document.getElementById('chat-screen');
+    chatScreen.style.display = 'flex';
+    chatScreen.style.flexDirection = 'column';
+    document.getElementById('chat-topic-display').textContent = '"' + topic + '"';
+    document.getElementById('chat-char-emoji').innerHTML = state.character.emoji;
+    document.getElementById('chat-char-name').textContent = state.character.name;
+    document.getElementById('messages').innerHTML = '';
+    document.getElementById('header-score').style.display = 'flex';
+    document.getElementById('score-bar').style.width = '0%';
+    updateRoundCounter();
+
+    await sendToAI('The user\'s position is: "' + topic + '". Open the debate immediately, arguing against their position. Stay completely in character from the first word.', true);
+  }
+
+  async function sendToAI(userContent, isOpener) {
+    if (state.isLoading) return;
+    state.isLoading = true;
+    document.getElementById('send-btn').disabled = true;
+
+    if (!isOpener) {
+      state.round++;
+      updateRoundCounter();
+      state.messages.push({ role: 'user', content: userContent });
+      addMessage('user', userContent);
+    }
+
+    const typingEl = addTyping();
+
+    try {
+      const messages = isOpener ? [{ role: 'user', content: userContent }] : state.messages;
+      const isLastRound = state.round >= state.maxRounds;
+      const finalInstruction = isLastRound ? '\n\nThis is the final round. After your rebuttal, give the verdict:\n\n---VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]' : '';
+
+      const lastMsg = isLastRound
+        ? [...messages.slice(0, -1), { role: 'user', content: messages[messages.length - 1].content + finalInstruction }]
+        : messages;
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: buildSystemPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
+      });
+
+      const data = await response.json();
+      const aiText = data.content && data.content[0] ? data.content[0].text : "I am speechless. You win this one.";
+
+      typingEl.remove();
+
+      if (aiText.includes('---VERDICT---')) {
+        const parts = aiText.split('---VERDICT---');
+        const rebuttal = parts[0].trim();
+        const verdictBlock = parts[1];
+        if (rebuttal) { addMessage('ai', rebuttal); state.messages.push({ role: 'assistant', content: rebuttal }); }
+        setTimeout(function() { showVerdict(verdictBlock); }, 1200);
+      } else {
+        addMessage('ai', aiText);
+        state.messages.push({ role: 'assistant', content: aiText });
+      }
+    } catch(err) {
+      typingEl.remove();
+      addMessage('ai', "My connection dropped — probably for the best, you were losing anyway.");
+    }
+
+    state.isLoading = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('chat-input').focus();
+  }
+
+  function addMessage(role, text) {
+    const el = document.createElement('div');
+    el.className = 'message ' + role;
+    const avatarContent = role === 'user' ? '&#128100;' : state.character.emoji;
+    el.innerHTML = '<div class="avatar">' + avatarContent + '</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+    document.getElementById('messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function addTyping() {
+    const el = document.createElement('div');
+    el.className = 'message ai';
+    el.innerHTML = '<div class="avatar">' + state.character.emoji + '</div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+    document.getElementById('messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function updateRoundCounter() {
+    document.getElementById('round-counter').textContent = state.round >= state.maxRounds ? 'Final round...' : 'Round ' + (state.round + 1) + ' of ' + state.maxRounds;
+    document.getElementById('round-score').textContent = state.round;
+  }
+
+  document.getElementById('send-btn').addEventListener('click', handleSend);
+  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  });
+  document.getElementById('chat-input').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  function handleSend() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || state.isLoading) return;
+    input.value = '';
+    input.style.height = 'auto';
+    sendToAI(text);
+  }
+
+  function showVerdict(verdictText) {
+    const scoreMatch = verdictText.match(/SCORE:\s*(\d+)/);
+    const labelMatch = verdictText.match(/LABEL:\s*(.+)/);
+    const summaryMatch = verdictText.match(/SUMMARY:\s*([\s\S]+)/);
+
+    const score = scoreMatch ? parseInt(scoreMatch[1]) : 5;
+    const label = labelMatch ? labelMatch[1].trim() : 'Fought Hard';
+    const summary = summaryMatch ? summaryMatch[1].trim() : '';
+
+    document.getElementById('chat-screen').style.display = 'none';
+    const vs = document.getElementById('verdict-screen');
+    vs.style.display = 'flex';
+    vs.style.flexDirection = 'column';
+
+    document.getElementById('verdict-score').textContent = score;
+    document.getElementById('verdict-label').textContent = label;
+    document.getElementById('verdict-summary').textContent = summary;
+    document.getElementById('card-score').textContent = score;
+    document.getElementById('card-label').textContent = label;
+    document.getElementById('card-topic').textContent = '"' + state.topic + '"';
+    document.getElementById('card-char-emoji').innerHTML = state.character.emoji;
+    document.getElementById('card-char-name').textContent = 'vs ' + state.character.name;
+
+    setTimeout(function() { document.getElementById('score-bar').style.width = (score * 10) + '%'; }, 300);
+  }
+
+  document.getElementById('download-btn').addEventListener('click', function() {
+    const card = document.getElementById('share-card');
+    html2canvas(card, { backgroundColor: '#111111', scale: 2, useCORS: true }).then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = 'argue-with-me-result.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  document.getElementById('new-debate-btn').addEventListener('click', goHome);
+  document.getElementById('new-topic-btn').addEventListener('click', goHome);
+  document.getElementById('replay-btn').addEventListener('click', function() {
+    document.getElementById('topic-input').value = state.topic;
+    goHome();
+  });
+
+  function goHome() {
+    document.getElementById('chat-screen').style.display = 'none';
+    document.getElementById('verdict-screen').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('header-score').style.display = 'none';
+  }
+</script>
+</body>
+</html>
