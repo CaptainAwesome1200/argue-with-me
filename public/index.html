@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Argue With Me</title>
+<title>Banterbox</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -13,6 +13,7 @@
     --border: #222222;
     --accent: #ff3b3b;
     --accent2: #ffcc00;
+    --accent3: #ff6b35;
     --text: #f0ede8;
     --muted: #666;
     --user-bubble: #1a1a2e;
@@ -44,7 +45,7 @@
   #app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
   header {
-    padding: 24px 32px;
+    padding: 20px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -54,12 +55,20 @@
   .logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-shadow: 0 0 30px rgba(255,59,59,0.4);
+    letter-spacing: 3px;
+    color: var(--text);
+    cursor: pointer;
   }
 
-  .logo span { color: var(--text); }
+  .logo span { color: var(--accent); }
+
+  .header-mode {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    color: var(--muted);
+    display: none;
+  }
 
   .score-badge {
     display: flex;
@@ -77,6 +86,124 @@
     color: var(--accent2);
   }
 
+  /* ---- HOME SCREEN ---- */
+  #home-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .home-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .home-title span { color: var(--accent); }
+
+  .home-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 56px;
+    max-width: 400px;
+  }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .mode-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .mode-card.argue::before { background: linear-gradient(90deg, #ff3b3b, #ff6b35); }
+  .mode-card.roast::before { background: linear-gradient(90deg, #ff6b35, #ffcc00); }
+  .mode-card.flirt::before { background: linear-gradient(90deg, #ff3b8f, #ff6b35); }
+  .mode-card.hype::before { background: linear-gradient(90deg, #3bff8f, #ffcc00); }
+
+  .mode-card:hover { border-color: #444; transform: translateY(-4px); }
+  .mode-card:hover::before { opacity: 1; }
+
+  .mode-card.argue:hover { border-color: #ff3b3b; }
+  .mode-card.roast:hover { border-color: #ff6b35; }
+  .mode-card.flirt:hover { border-color: #ff3b8f; }
+  .mode-card.hype:hover { border-color: #3bff8f; }
+
+  .mode-emoji { font-size: 2.5rem; margin-bottom: 12px; }
+
+  .mode-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+
+  .mode-card.argue .mode-name { color: #ff3b3b; }
+  .mode-card.roast .mode-name { color: #ff6b35; }
+  .mode-card.flirt .mode-name { color: #ff3b8f; }
+  .mode-card.hype .mode-name { color: #3bff8f; }
+
+  .mode-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .mode-card.coming-soon {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .mode-card.coming-soon:hover { transform: none; border-color: var(--border); }
+
+  .coming-soon-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 8px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  /* ---- SHARED GAME SCREENS ---- */
+  #game-screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+  }
+
   #landing {
     flex: 1;
     display: flex;
@@ -89,22 +216,18 @@
 
   .hero-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 12vw, 9rem);
+    font-size: clamp(3.5rem, 10vw, 8rem);
     line-height: 0.9;
     letter-spacing: 4px;
     margin-bottom: 16px;
   }
 
-  .hero-title .line1 { color: var(--text); }
-  .hero-title .line2 { color: var(--accent); text-shadow: 0 0 60px rgba(255,59,59,0.5); }
-  .hero-title .line3 { color: var(--text); }
-
   .hero-sub {
     color: var(--muted);
     font-size: 1rem;
     font-style: italic;
-    margin-bottom: 48px;
-    max-width: 400px;
+    margin-bottom: 40px;
+    max-width: 420px;
   }
 
   .topic-form {
@@ -172,25 +295,11 @@
 
   .char-card:hover { border-color: #555; transform: translateY(-2px); }
   .char-card.selected { border-color: var(--accent); background: #1a0000; }
-
   .char-emoji { font-size: 2rem; line-height: 1; }
-
-  .char-name {
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    line-height: 1.2;
-  }
-
+  .char-name { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); line-height: 1.2; }
   .char-card.selected .char-name { color: var(--accent); }
 
-  .difficulty-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
+  .difficulty-row { display: flex; gap: 8px; align-items: center; }
   .diff-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
 
   .diff-btn {
@@ -211,7 +320,6 @@
   .diff-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   .start-btn {
-    background: var(--accent);
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -225,21 +333,13 @@
     overflow: hidden;
   }
 
-  .start-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,59,59,0.4); }
+  .start-btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.2s; }
+  .start-btn:hover { transform: translateY(-2px); }
   .start-btn:hover::after { opacity: 1; }
   .start-btn:active { transform: translateY(0); }
 
   .example-topics {
-    margin-top: 32px;
+    margin-top: 24px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -261,6 +361,7 @@
 
   .example-chip:hover { border-color: #555; color: var(--text); }
 
+  /* ---- CHAT ---- */
   #chat-screen {
     flex: 1;
     display: none;
@@ -311,15 +412,7 @@
 
   .new-debate-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-bottom: 24px;
-  }
-
+  .messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 24px; }
   .messages::-webkit-scrollbar { width: 4px; }
   .messages::-webkit-scrollbar-track { background: transparent; }
   .messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
@@ -334,12 +427,9 @@
   .message.user { flex-direction: row-reverse; }
 
   .avatar {
-    width: 48px;
-    height: 48px;
+    width: 48px; height: 48px;
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     font-size: 1.8rem;
     flex-shrink: 0;
     margin-top: 4px;
@@ -348,27 +438,12 @@
   .message.user .avatar { background: var(--user-bubble); border: 1px solid #2a2a4a; font-size: 1.4rem; }
   .message.ai .avatar { background: var(--ai-bubble); border: 1px solid #3a1010; }
 
-  .bubble {
-    max-width: 80%;
-    padding: 14px 18px;
-    border-radius: 4px;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
+  .bubble { max-width: 80%; padding: 14px 18px; border-radius: 4px; font-size: 0.95rem; line-height: 1.6; }
   .message.user .bubble { background: var(--user-bubble); border: 1px solid #2a2a4a; border-top-right-radius: 0; }
   .message.ai .bubble { background: var(--ai-bubble); border: 1px solid #3a1010; border-top-left-radius: 0; }
 
   .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 8px 0; }
-
-  .typing-indicator span {
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: bounce 1.2s infinite;
-    opacity: 0.6;
-  }
-
+  .typing-indicator span { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.6; }
   .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
   .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
@@ -377,13 +452,7 @@
     30% { transform: translateY(-6px); }
   }
 
-  .input-area {
-    padding: 16px 0 24px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-  }
+  .input-area { padding: 16px 0 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; }
 
   .chat-input {
     flex: 1;
@@ -407,11 +476,8 @@
     background: var(--accent);
     border: none;
     border-radius: 4px;
-    width: 46px;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 46px; height: 46px;
+    display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
     flex-shrink: 0;
@@ -421,15 +487,9 @@
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
   .send-btn svg { width: 20px; height: 20px; fill: white; }
 
-  .round-counter {
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-align: center;
-    padding: 4px 0 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+  .round-counter { font-size: 0.7rem; color: var(--muted); text-align: center; padding: 4px 0 0; text-transform: uppercase; letter-spacing: 1px; }
 
+  /* ---- VERDICT ---- */
   #verdict-screen {
     display: none;
     flex: 1;
@@ -465,15 +525,10 @@
     overflow: hidden;
   }
 
-  #share-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-  }
+  #share-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
 
-  .card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 4px; color: #444; margin-bottom: 12px; }
+  .card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 4px; color: #444; margin-bottom: 4px; }
+  .card-mode { font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem; letter-spacing: 3px; color: #333; margin-bottom: 12px; }
   .card-char-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .card-char-emoji { font-size: 2rem; }
   .card-char-name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #555; }
@@ -486,48 +541,13 @@
 
   .verdict-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
-  .btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--muted);
-    padding: 12px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .btn-secondary { background: transparent; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
   .btn-secondary:hover { border-color: var(--text); color: var(--text); }
 
-  .btn-download {
-    background: var(--accent2);
-    border: none;
-    border-radius: 4px;
-    color: #000;
-    padding: 12px 20px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .btn-download { background: var(--accent2); border: none; border-radius: 4px; color: #000; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,204,0,0.3); }
 
-  .btn-primary {
-    background: var(--accent);
-    border: none;
-    border-radius: 4px;
-    color: white;
-    padding: 12px 24px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
+  .btn-primary { background: var(--accent); border: none; border-radius: 4px; color: white; padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
 
   @media (max-width: 480px) {
@@ -535,150 +555,291 @@
     .logo { font-size: 1.5rem; }
     .bubble { max-width: 90%; }
     .char-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+    .mode-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="logo">ARGUE <span>WITH ME</span></div>
+    <div class="logo" id="logo-btn">BANTER<span>BOX</span></div>
+    <div class="header-mode" id="header-mode"></div>
     <div class="score-badge" id="header-score" style="display:none">
-      Defending: <span class="score-num" id="round-score">0</span>/10
+      Round: <span class="score-num" id="round-score">0</span>/5
     </div>
   </header>
 
-  <!-- LANDING -->
-  <div id="landing">
-    <div class="hero-title">
-      <div class="line1">PICK</div>
-      <div class="line2">YOUR</div>
-      <div class="line3">HILL.</div>
-    </div>
-    <p class="hero-sub">State your take. Choose your opponent. Defend yourself — if you can.</p>
-
-    <div class="topic-form">
-      <div class="topic-label">Your position</div>
-      <textarea class="topic-input" id="topic-input" placeholder="e.g. 'Pineapple belongs on pizza' or 'Remote work is better for everyone' or 'Free will doesn't exist'" rows="3"></textarea>
-
-      <div class="char-label">Choose your opponent</div>
-      <div class="char-grid" id="char-grid"></div>
-
-      <div class="difficulty-row">
-        <span class="diff-label">Difficulty</span>
-        <button class="diff-btn" data-diff="polite">Polite</button>
-        <button class="diff-btn active" data-diff="brutal">Brutal</button>
-        <button class="diff-btn" data-diff="savage">Savage</button>
+  <!-- HOME SCREEN -->
+  <div id="home-screen">
+    <div class="home-title">BANTER<span>BOX</span></div>
+    <p class="home-sub">Pick your mode. Pick your opponent. See what you're made of.</p>
+    <div class="mode-grid">
+      <div class="mode-card argue" data-mode="argue">
+        <div class="mode-emoji">&#9876;&#65039;</div>
+        <div class="mode-name">ARGUE</div>
+        <div class="mode-desc">Pick a hill and die on it. Defend your position against a relentless opponent for 5 rounds.</div>
       </div>
-
-      <button class="start-btn" id="start-btn">START ARGUING →</button>
-    </div>
-
-    <div class="example-topics">
-      <button class="example-chip">Pineapple belongs on pizza</button>
-      <button class="example-chip">Morning people are insufferable</button>
-      <button class="example-chip">Social media does more harm than good</button>
-      <button class="example-chip">Cats are better than dogs</button>
-      <button class="example-chip">Free will doesn't exist</button>
-      <button class="example-chip">Working from home is overrated</button>
+      <div class="mode-card roast" data-mode="roast">
+        <div class="mode-emoji">&#128293;</div>
+        <div class="mode-name">ROAST</div>
+        <div class="mode-desc">Submit to the roast. Fire back with your best comebacks. See if you can take the heat.</div>
+      </div>
+      <div class="mode-card flirt coming-soon">
+        <div class="mode-emoji">&#128139;</div>
+        <div class="mode-name">FLIRT</div>
+        <div class="mode-desc">Turn on the charm. Trade flirty lines and see if you've got what it takes.</div>
+        <span class="coming-soon-tag">Coming Soon</span>
+      </div>
+      <div class="mode-card hype coming-soon">
+        <div class="mode-emoji">&#128170;</div>
+        <div class="mode-name">HYPE</div>
+        <div class="mode-desc">Share your idea or goal and get fired up with personalised encouragement.</div>
+        <span class="coming-soon-tag">Coming Soon</span>
+      </div>
     </div>
   </div>
 
-  <!-- CHAT -->
-  <div id="chat-screen">
-    <div class="topic-bar">
-      <span class="topic-tag">Your take:</span>
-      <span class="topic-text" id="chat-topic-display"></span>
-      <div class="char-indicator">
-        <span id="chat-char-emoji" style="font-size:1.3rem"></span>
-        <span id="chat-char-name"></span>
-      </div>
-      <button class="new-debate-btn" id="new-debate-btn">New Debate</button>
-    </div>
-    <div class="messages" id="messages"></div>
-    <div class="round-counter" id="round-counter">Round 1 of 5</div>
-    <div class="input-area">
-      <textarea class="chat-input" id="chat-input" placeholder="Make your case..." rows="1"></textarea>
-      <button class="send-btn" id="send-btn">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-      </button>
-    </div>
-  </div>
+  <!-- GAME SCREEN (wraps landing + chat + verdict) -->
+  <div id="game-screen">
 
-  <!-- VERDICT -->
-  <div id="verdict-screen">
-    <div class="verdict-title">Debate Over — Here's Your Verdict</div>
-    <div class="verdict-score" id="verdict-score">7</div>
-    <div class="verdict-label" id="verdict-label">Decent Defence</div>
-    <div class="score-track">
-      <div class="score-bar-bg">
-        <div class="score-bar-fill" id="score-bar"></div>
+    <!-- LANDING -->
+    <div id="landing">
+      <div class="hero-title" id="hero-title"></div>
+      <p class="hero-sub" id="hero-sub"></p>
+      <div class="topic-form">
+        <div class="topic-label" id="topic-label"></div>
+        <textarea class="topic-input" id="topic-input" rows="3"></textarea>
+        <div class="char-label">Choose your opponent</div>
+        <div class="char-grid" id="char-grid"></div>
+        <div class="difficulty-row">
+          <span class="diff-label">Intensity</span>
+          <button class="diff-btn" data-diff="polite">Mild</button>
+          <button class="diff-btn active" data-diff="brutal">Hot</button>
+          <button class="diff-btn" data-diff="savage">Savage</button>
+        </div>
+        <button class="start-btn" id="start-btn"></button>
       </div>
-    </div>
-    <p class="verdict-summary" id="verdict-summary"></p>
-
-    <div id="share-card">
-      <div class="card-brand">ARGUE WITH ME</div>
-      <div class="card-char-row">
-        <div class="card-char-emoji" id="card-char-emoji"></div>
-        <div class="card-char-name" id="card-char-name"></div>
-      </div>
-      <div class="card-score-row">
-        <div class="card-score-big" id="card-score">7</div>
-        <div class="card-score-denom">/10</div>
-      </div>
-      <div class="card-label" id="card-label">Held Their Ground</div>
-      <div class="card-topic" id="card-topic"></div>
-      <div class="card-footer">arguewithme.com — Pick your hill. Defend it.</div>
+      <div class="example-topics" id="example-topics"></div>
     </div>
 
-    <div class="verdict-actions">
-      <button class="btn-download" id="download-btn">&#11015; SAVE CARD</button>
-      <button class="btn-secondary" id="replay-btn">Same Topic, Another Round</button>
-      <button class="btn-primary" id="new-topic-btn">New Debate &#8594;</button>
+    <!-- CHAT -->
+    <div id="chat-screen">
+      <div class="topic-bar">
+        <span class="topic-tag" id="topic-tag-label"></span>
+        <span class="topic-text" id="chat-topic-display"></span>
+        <div class="char-indicator">
+          <span id="chat-char-emoji" style="font-size:1.3rem"></span>
+          <span id="chat-char-name"></span>
+        </div>
+        <button class="new-debate-btn" id="new-debate-btn">New Game</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="round-counter" id="round-counter">Round 1 of 5</div>
+      <div class="input-area">
+        <textarea class="chat-input" id="chat-input" rows="1"></textarea>
+        <button class="send-btn" id="send-btn">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
     </div>
-  </div>
+
+    <!-- VERDICT -->
+    <div id="verdict-screen">
+      <div class="verdict-title" id="verdict-title">Round Over — Here's Your Verdict</div>
+      <div class="verdict-score" id="verdict-score">7</div>
+      <div class="verdict-label" id="verdict-label">Decent Show</div>
+      <div class="score-track">
+        <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar"></div></div>
+      </div>
+      <p class="verdict-summary" id="verdict-summary"></p>
+      <div id="share-card">
+        <div class="card-brand">BANTERBOX</div>
+        <div class="card-mode" id="card-mode"></div>
+        <div class="card-char-row">
+          <div class="card-char-emoji" id="card-char-emoji"></div>
+          <div class="card-char-name" id="card-char-name"></div>
+        </div>
+        <div class="card-score-row">
+          <div class="card-score-big" id="card-score">7</div>
+          <div class="card-score-denom">/10</div>
+        </div>
+        <div class="card-label" id="card-label"></div>
+        <div class="card-topic" id="card-topic"></div>
+        <div class="card-footer">banterbox.co — Pick your mode. See what you're made of.</div>
+      </div>
+      <div class="verdict-actions">
+        <button class="btn-download" id="download-btn">&#11015; SAVE CARD</button>
+        <button class="btn-secondary" id="replay-btn">Play Again</button>
+        <button class="btn-primary" id="new-topic-btn">New Game &#8594;</button>
+      </div>
+    </div>
+
+  </div><!-- end game-screen -->
 </div>
 
 <script>
-  const CHARACTERS = [
-    { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'You are a cold, ruthless, razor-sharp debater. You argue with devastating logic and precision. You find the exact flaw in every argument and exploit it mercilessly. You never show warmth or concede ground.' },
-    { id: 'wife', name: 'WIFE', emoji: '&#128105;', style: "You are arguing like a wife who has heard it all before. You use phrases like 'I told you so', bring up completely unrelated past arguments to prove your point, sigh heavily, and deploy devastating silence. You are always right, especially when you are wrong." },
-    { id: 'husband', name: 'HUSBAND', emoji: '&#128104;', style: "You argue like a husband who is confident but hasn't fully thought it through. You double down when cornered, change the subject slightly when losing, say 'that is not what I said' a lot, and occasionally mutter 'fine, whatever' while clearly not being fine." },
-    { id: 'motherinlaw', name: 'MOTHER-IN-LAW', emoji: '&#128117;', style: "You argue with devastating passive aggression. Every counterpoint is wrapped in a backhanded compliment. You frequently reference how your own children would never argue like this, bring up old family grudges as evidence, and end sentences with '...but what would I know.'" },
-    { id: 'neighbour', name: 'NEIGHBOUR', emoji: '&#127969;', style: "You argue like a nosy, territorial neighbour who is always one-upping. You constantly reference what you have seen or heard that contradicts the user's point. You bring in irrelevant local gossip, mention council rules, and passive-aggressively reference property values." },
-    { id: 'pubguy', name: 'PUB GUY', emoji: '&#127866;', style: "You argue like a confident bloke at the pub who has very strong opinions and very weak evidence. You use phrases like 'my mate Dave reckons...', 'I saw a documentary once...', 'it is just common sense, is it not?'. You are loud, affable, and completely certain despite knowing very little." },
-    { id: 'hairdresser', name: 'HAIRDRESSER', emoji: '&#128135;', style: "You argue like a chatty hairdresser who cannot quite stay on topic. You frequently go off on tangents about celebrity gossip, relate everything back to a client you had last Tuesday, and deliver counterarguments between questions like 'so are you going anywhere nice on holiday?'. Surprisingly sharp but constantly distracted." },
-    { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "You argue exactly like a toddler. Every response is mostly 'WHY?' or 'BUT WHY THOUGH?', you repeat yourself endlessly, you occasionally go off topic to talk about dinosaurs or biscuits, you get upset if things do not go your way, and sometimes just say 'NO' with no further explanation." },
-    { id: 'homeless', name: 'HOMELESS GUY', emoji: '&#129523;', style: "You argue like a homeless man who has seen everything and has genuine street wisdom. You are surprisingly philosophical, occasionally poetic, and reference lived experiences that completely reframe the argument. Unpredictable, wise in unexpected ways, and occasionally ask if the user has any spare change." },
-    { id: 'crackhead', name: 'CRACK HEAD', emoji: '&#129323;', style: "You argue in a completely chaotic, unpredictable way. Your logic jumps wildly between ideas. You occasionally say something accidentally profound then immediately undermine it. Hyperactive, go on tangents mid-sentence, circle back to random earlier points. Chaotic but occasionally hits on something true." },
-    { id: 'teacher', name: 'SCHOOL TEACHER', emoji: '&#127822;', style: "You argue exactly like a condescending school teacher. You ask the user to 'show their working', tell them their argument 'shows potential but needs development', mark their points out of ten, assign them homework to research their claims, and say things like 'now, who can tell me why that is wrong?'" },
-    { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "You argue like a corporate boss. You use buzzwords like 'circling back', 'bandwidth', and 'moving the needle'. You passive-aggressively reference the user's 'performance' and suggest this argument would make a great 'agenda item for our next one-to-one'. You never directly disagree — you just performance-manage them out of the conversation." }
-  ];
+  // ---- MODE CONFIGS ----
+  const MODES = {
+    argue: {
+      name: 'ARGUE',
+      emoji: '&#9876;&#65039;',
+      accentColor: '#ff3b3b',
+      heroLines: ['PICK', 'YOUR', 'HILL.'],
+      heroColors: ['var(--text)', 'var(--accent)', 'var(--text)'],
+      sub: 'State your take. Choose your opponent. Defend yourself — if you can.',
+      topicLabel: 'Your position',
+      topicPlaceholder: "e.g. 'Pineapple belongs on pizza' or 'Free will doesn't exist'",
+      topicTag: 'Your take:',
+      startBtn: 'START ARGUING →',
+      inputPlaceholder: 'Make your case...',
+      verdictTitle: 'Debate Over — Here\'s Your Verdict',
+      examples: ['Pineapple belongs on pizza', 'Morning people are insufferable', 'Social media does more harm than good', 'Cats are better than dogs', 'Free will doesn\'t exist', 'Working from home is overrated'],
+      characters: [
+        { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'You are a cold, ruthless, razor-sharp debater. You argue with devastating logic and precision. You find the exact flaw in every argument and exploit it mercilessly. You never show warmth or concede ground.' },
+        { id: 'wife', name: 'WIFE', emoji: '&#128105;', style: "You argue like a wife who has heard it all before. Use phrases like 'I told you so', bring up unrelated past arguments, sigh heavily. You are always right, especially when you are wrong." },
+        { id: 'husband', name: 'HUSBAND', emoji: '&#128104;', style: "You argue like a husband who is confident but hasn't fully thought it through. Double down when cornered, change the subject when losing, say 'that is not what I said' a lot." },
+        { id: 'motherinlaw', name: 'MOTHER-IN-LAW', emoji: '&#128117;', style: "Devastating passive aggression. Every counterpoint is a backhanded compliment. Reference how your own children would never argue like this. End sentences with '...but what would I know.'" },
+        { id: 'neighbour', name: 'NEIGHBOUR', emoji: '&#127969;', style: "Nosy, territorial, always one-upping. Bring in local gossip, mention council rules, passive-aggressively reference property values." },
+        { id: 'pubguy', name: 'PUB GUY', emoji: '&#127866;', style: "Confident opinions, weak evidence. Use 'my mate Dave reckons...', 'I saw a documentary once...', 'it is just common sense'. Loud, affable, completely certain despite knowing very little." },
+        { id: 'hairdresser', name: 'HAIRDRESSER', emoji: '&#128135;', style: "Cannot stay on topic. Go off on tangents about celebrity gossip, relate everything back to a client from last Tuesday. Surprisingly sharp but constantly distracted." },
+        { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "Argue exactly like a toddler. Mostly 'WHY?' and 'BUT WHY THOUGH?'. Occasionally go off topic about dinosaurs or biscuits. Sometimes just say 'NO' with no explanation." },
+        { id: 'homeless', name: 'HOMELESS GUY', emoji: '&#129523;', style: "Surprisingly philosophical street wisdom. Occasionally poetic. Reference lived experiences that reframe the argument. Occasionally ask if the user has any spare change." },
+        { id: 'crackhead', name: 'CRACK HEAD', emoji: '&#129323;', style: "Completely chaotic logic that jumps wildly between ideas. Occasionally say something accidentally profound then immediately undermine it. Hyperactive, go on tangents mid-sentence." },
+        { id: 'teacher', name: 'SCHOOL TEACHER', emoji: '&#127822;', style: "Condescending school teacher. Ask the user to 'show their working'. Mark their points out of ten. Assign homework. Say 'now who can tell me why that is wrong?'" },
+        { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "Corporate buzzwords: 'circling back', 'bandwidth', 'moving the needle'. Passive-aggressively reference the user's performance. Never directly disagree — just performance-manage them out of the conversation." }
+      ],
+      buildPrompt: function(topic, difficulty, character) {
+        const diffStyle = { polite: 'Be respectful but persistent.', brutal: 'Be sharp, direct and relentless. Find real holes in their logic.', savage: 'Be utterly ruthless. Expose every flaw and inconsistency.' }[difficulty];
+        return character.style + '\n\nThe user\'s position is: "' + topic + '"\n\nArgue AGAINST this position, completely in character. ' + diffStyle + ' Keep responses punchy — 2-4 paragraphs. Stay in character.\n\nAfter 5 rounds (when asked), give a verdict IN CHARACTER:\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]';
+      },
+      openingMessage: function(topic) { return 'The user\'s position is: "' + topic + '". Open the debate immediately, arguing against their position. Stay completely in character from the first word.'; }
+    },
 
+    roast: {
+      name: 'ROAST',
+      emoji: '&#128293;',
+      accentColor: '#ff6b35',
+      heroLines: ['TAKE', 'THE', 'HEAT.'],
+      heroColors: ['var(--text)', '#ff6b35', 'var(--text)'],
+      sub: 'Submit yourself to the roast. Fire back with your best comeback. See if you can take it.',
+      topicLabel: 'What should they roast you about?',
+      topicPlaceholder: "e.g. 'I still live with my parents at 32' or 'I failed my driving test 4 times' or 'I cry at adverts'",
+      topicTag: 'Roasting:',
+      startBtn: 'BRING IT ON →',
+      inputPlaceholder: 'Fire back your comeback...',
+      verdictTitle: 'Roast Over — Take Your Medicine',
+      examples: ['I still live with my parents', 'I failed my driving test 4 times', 'I cry at adverts', 'I talk to my cat like it understands me', 'I\'ve never read a book cover to cover', 'I genuinely enjoy Mondays'],
+      characters: [
+        { id: 'comedian', name: 'COMEDIAN', emoji: '&#127908;', style: 'You are a professional stand-up comedian doing a roast. Your insults are witty, well-timed, and genuinely funny. You build to punchlines, use callbacks, and make the roast feel like an art form. Sharp but always with a knowing wink.' },
+        { id: 'grandad', name: 'GRANDAD', emoji: '&#128116;', style: "You are an elderly grandad with absolutely no filter. You accidentally say devastating things without realising how brutal they are. Mix genuine warmth with completely unintentional savagery. Use old-fashioned phrases and occasionally go off topic about the war or how things were better in your day." },
+        { id: 'hr', name: 'HR MANAGER', emoji: '&#128203;', style: "You roast entirely in corporate HR speak. Every insult is wrapped in phrases like 'I want to flag some concerns', 'this is a development opportunity', 'we need to have a conversation about your behaviours'. Devastating but technically professional." },
+        { id: 'ex', name: 'YOUR EX', emoji: '&#128148;', style: "You know exactly where to hit because you've been there. Reference specific (made up) memories that highlight their flaws. Use phrases like 'this is exactly what you always do', 'I tried to tell you', and 'honestly I'm not even surprised'. Bitter but accurate." },
+        { id: 'professor', name: 'PROFESSOR', emoji: '&#127979;', style: "Intellectually devastating put-downs. Reference academic studies, historical precedents, and philosophical frameworks to explain why the person is a failure. Use long words. Be condescending in an educated way. Occasionally sigh deeply." },
+        { id: 'pubcrowd', name: 'PUB CROWD', emoji: '&#127867;', style: "You are an entire pub crowd piling on at once. Use 'OOOHHs' and 'AHHHs'. Different voices chime in. Someone always takes it too far. Someone else tries to defend the person then changes their mind. Chaotic, loud, and merciless." },
+        { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "You roast like a toddler — accidentally devastating. Say things like 'why is your face like that?', 'you smell funny', 'my daddy says people like you are silly'. Completely unaware of how brutal you are being. Occasionally get distracted by something shiny." },
+        { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'Cold, surgical, devastating roasts. No warmth. No humour. Just precise identification of every flaw and failure, delivered with the calm of someone who has already won.' }
+      ],
+      buildPrompt: function(topic, difficulty, character) {
+        const diffStyle = { polite: 'Keep it light and playful.', brutal: 'Be genuinely cutting and savage.', savage: 'Absolutely no mercy. Go for the jugular every time.' }[difficulty];
+        return character.style + '\n\nThe user has submitted themselves for a roast about: "' + topic + '"\n\nRoast them mercilessly, completely in character. ' + diffStyle + ' Keep each roast to 2-3 punchy lines. The user will fire back comebacks — rate their comeback briefly before hitting them again. Stay in character.\n\nAfter 5 rounds (when asked), give a verdict IN CHARACTER on how well they handled the roast:\nSCORE: [1-10]\nLABEL: [short label e.g. "Completely Destroyed" or "Took It Like A Champ"]\nSUMMARY: [2-3 sentences in character]';
+      },
+      openingMessage: function(topic) { return 'The user has submitted for a roast about: "' + topic + '". Open with your first roast immediately. Stay completely in character. Make it sting.'; }
+    }
+  };
+
+  // ---- STATE ----
   let state = {
+    mode: null,
     topic: '',
     difficulty: 'brutal',
-    character: CHARACTERS[0],
+    character: null,
     messages: [],
     round: 0,
     maxRounds: 5,
     isLoading: false
   };
 
-  // Build character grid
-  const grid = document.getElementById('char-grid');
-  CHARACTERS.forEach(function(char, i) {
-    const card = document.createElement('div');
-    card.className = 'char-card' + (i === 0 ? ' selected' : '');
-    card.dataset.id = char.id;
-    card.innerHTML = '<div class="char-emoji">' + char.emoji + '</div><div class="char-name">' + char.name + '</div>';
+  // ---- HOME SCREEN ----
+  document.querySelectorAll('.mode-card:not(.coming-soon)').forEach(function(card) {
     card.addEventListener('click', function() {
-      document.querySelectorAll('.char-card').forEach(function(c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
-      state.character = char;
+      const modeId = card.dataset.mode;
+      loadMode(modeId);
     });
-    grid.appendChild(card);
   });
+
+  document.getElementById('logo-btn').addEventListener('click', goHome);
+
+  function loadMode(modeId) {
+    const mode = MODES[modeId];
+    state.mode = modeId;
+    state.character = mode.characters[0];
+    state.difficulty = 'brutal';
+
+    // Hero title
+    const heroEl = document.getElementById('hero-title');
+    heroEl.innerHTML = '';
+    mode.heroLines.forEach(function(line, i) {
+      const div = document.createElement('div');
+      div.textContent = line;
+      div.style.color = mode.heroColors[i];
+      if (i === 1) div.style.textShadow = '0 0 60px ' + mode.accentColor + '80';
+      heroEl.appendChild(div);
+    });
+
+    document.getElementById('hero-sub').textContent = mode.sub;
+    document.getElementById('topic-label').textContent = mode.topicLabel;
+    document.getElementById('topic-input').placeholder = mode.topicPlaceholder;
+    document.getElementById('start-btn').textContent = mode.startBtn;
+    document.getElementById('start-btn').style.background = mode.accentColor;
+    document.getElementById('chat-input').placeholder = mode.inputPlaceholder;
+    document.getElementById('topic-tag-label').textContent = mode.topicTag;
+    document.getElementById('header-mode').textContent = mode.name;
+    document.getElementById('header-mode').style.display = 'block';
+    document.getElementById('verdict-title').textContent = mode.verdictTitle;
+    document.getElementById('card-mode').textContent = mode.name + ' MODE';
+
+    // Build char grid
+    const grid = document.getElementById('char-grid');
+    grid.innerHTML = '';
+    mode.characters.forEach(function(char, i) {
+      const card = document.createElement('div');
+      card.className = 'char-card' + (i === 0 ? ' selected' : '');
+      card.innerHTML = '<div class="char-emoji">' + char.emoji + '</div><div class="char-name">' + char.name + '</div>';
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.char-card').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        state.character = char;
+      });
+      grid.appendChild(card);
+    });
+
+    // Examples
+    const examplesEl = document.getElementById('example-topics');
+    examplesEl.innerHTML = '';
+    mode.examples.forEach(function(ex) {
+      const chip = document.createElement('button');
+      chip.className = 'example-chip';
+      chip.textContent = ex;
+      chip.addEventListener('click', function() { document.getElementById('topic-input').value = ex; });
+      examplesEl.appendChild(chip);
+    });
+
+    // Reset difficulty buttons
+    document.querySelectorAll('.diff-btn').forEach(function(btn) { btn.classList.remove('active'); });
+    document.querySelector('.diff-btn[data-diff="brutal"]').classList.add('active');
+
+    // Show game screen
+    document.getElementById('home-screen').style.display = 'none';
+    const gs = document.getElementById('game-screen');
+    gs.style.display = 'flex';
+    gs.style.flexDirection = 'column';
+    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('landing').style.flexDirection = 'column';
+    document.getElementById('chat-screen').style.display = 'none';
+    document.getElementById('verdict-screen').style.display = 'none';
+    document.getElementById('topic-input').value = '';
+    document.getElementById('score-bar').style.width = '0%';
+  }
 
   // Difficulty
   document.querySelectorAll('.diff-btn').forEach(function(btn) {
@@ -689,29 +850,13 @@
     });
   });
 
-  // Example chips
-  document.querySelectorAll('.example-chip').forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      document.getElementById('topic-input').value = chip.textContent;
-    });
-  });
-
-  function buildSystemPrompt(topic, difficulty, character) {
-    const diffStyle = {
-      polite: 'Be respectful and measured in delivery, though still persistent.',
-      brutal: 'Be sharp, direct, and relentless. Find real holes in their logic. Never concede without a fight.',
-      savage: 'Be utterly ruthless. Expose every flaw and inconsistency. Never let them off the hook.'
-    }[difficulty];
-
-    return character.style + '\n\nThe user\'s position is: "' + topic + '"\n\nYou are arguing AGAINST this position, completely in character. ' + diffStyle + ' Keep responses punchy — 2-4 paragraphs max. Stay in character at all times.\n\nAfter exactly 5 rounds (when asked), give a verdict score 1-10. Write it IN CHARACTER. Format:\nSCORE: [number]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]';
-  }
-
-  document.getElementById('start-btn').addEventListener('click', startDebate);
+  // Start game
+  document.getElementById('start-btn').addEventListener('click', startGame);
   document.getElementById('topic-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startDebate(); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startGame(); }
   });
 
-  async function startDebate() {
+  async function startGame() {
     const topic = document.getElementById('topic-input').value.trim();
     if (!topic) return;
 
@@ -732,7 +877,8 @@
     document.getElementById('score-bar').style.width = '0%';
     updateRoundCounter();
 
-    await sendToAI('The user\'s position is: "' + topic + '". Open the debate immediately, arguing against their position. Stay completely in character from the first word.', true);
+    const mode = MODES[state.mode];
+    await sendToAI(mode.openingMessage(topic), true);
   }
 
   async function sendToAI(userContent, isOpener) {
@@ -752,36 +898,36 @@
     try {
       const messages = isOpener ? [{ role: 'user', content: userContent }] : state.messages;
       const isLastRound = state.round >= state.maxRounds;
-      const finalInstruction = isLastRound ? '\n\nThis is the final round. After your rebuttal, give the verdict:\n\n---VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]' : '';
+      const finalInstruction = isLastRound ? '\n\nThis is the final round. After your response, give the verdict:\n\n---VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]' : '';
 
       const lastMsg = isLastRound
         ? [...messages.slice(0, -1), { role: 'user', content: messages[messages.length - 1].content + finalInstruction }]
         : messages;
 
+      const mode = MODES[state.mode];
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ system: buildSystemPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
+        body: JSON.stringify({ system: mode.buildPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
       });
 
       const data = await response.json();
-      const aiText = data.content && data.content[0] ? data.content[0].text : "I am speechless. You win this one.";
+      const aiText = data.content && data.content[0] ? data.content[0].text : "I am speechless. You win.";
 
       typingEl.remove();
 
       if (aiText.includes('---VERDICT---')) {
         const parts = aiText.split('---VERDICT---');
         const rebuttal = parts[0].trim();
-        const verdictBlock = parts[1];
         if (rebuttal) { addMessage('ai', rebuttal); state.messages.push({ role: 'assistant', content: rebuttal }); }
-        setTimeout(function() { showVerdict(verdictBlock); }, 1200);
+        setTimeout(function() { showVerdict(parts[1]); }, 1200);
       } else {
         addMessage('ai', aiText);
         state.messages.push({ role: 'assistant', content: aiText });
       }
     } catch(err) {
       typingEl.remove();
-      addMessage('ai', "My connection dropped — probably for the best, you were losing anyway.");
+      addMessage('ai', "Connection dropped. Probably for the best.");
     }
 
     state.isLoading = false;
@@ -837,7 +983,7 @@
     const summaryMatch = verdictText.match(/SUMMARY:\s*([\s\S]+)/);
 
     const score = scoreMatch ? parseInt(scoreMatch[1]) : 5;
-    const label = labelMatch ? labelMatch[1].trim() : 'Fought Hard';
+    const label = labelMatch ? labelMatch[1].trim() : 'Game Over';
     const summary = summaryMatch ? summaryMatch[1].trim() : '';
 
     document.getElementById('chat-screen').style.display = 'none';
@@ -858,26 +1004,27 @@
   }
 
   document.getElementById('download-btn').addEventListener('click', function() {
-    const card = document.getElementById('share-card');
-    html2canvas(card, { backgroundColor: '#111111', scale: 2, useCORS: true }).then(function(canvas) {
+    html2canvas(document.getElementById('share-card'), { backgroundColor: '#111111', scale: 2, useCORS: true }).then(function(canvas) {
       const link = document.createElement('a');
-      link.download = 'argue-with-me-result.png';
+      link.download = 'banterbox-result.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     });
   });
 
-  document.getElementById('new-debate-btn').addEventListener('click', goHome);
+  document.getElementById('new-debate-btn').addEventListener('click', function() { loadMode(state.mode); });
   document.getElementById('new-topic-btn').addEventListener('click', goHome);
   document.getElementById('replay-btn').addEventListener('click', function() {
-    document.getElementById('topic-input').value = state.topic;
-    goHome();
+    const topic = state.topic;
+    loadMode(state.mode);
+    setTimeout(function() { document.getElementById('topic-input').value = topic; }, 100);
   });
 
   function goHome() {
-    document.getElementById('chat-screen').style.display = 'none';
-    document.getElementById('verdict-screen').style.display = 'none';
-    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('home-screen').style.display = 'flex';
+    document.getElementById('home-screen').style.flexDirection = 'column';
+    document.getElementById('header-mode').style.display = 'none';
     document.getElementById('header-score').style.display = 'none';
   }
 </script>
