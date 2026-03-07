@@ -14,10 +14,12 @@
     --accent: #ff3b3b;
     --accent2: #ffcc00;
     --accent3: #ff6b35;
+    --flirt: #ff3b8f;
     --text: #f0ede8;
     --muted: #666;
     --user-bubble: #1a1a2e;
     --ai-bubble: #1a0000;
+    --flirt-bubble: #1a0010;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,41 +54,13 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    color: var(--text);
-    cursor: pointer;
-  }
-
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: var(--text); cursor: pointer; }
   .logo span { color: var(--accent); }
+  .header-mode { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; color: var(--muted); display: none; }
+  .score-badge { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .score-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent2); }
 
-  .header-mode {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    color: var(--muted);
-    display: none;
-  }
-
-  .score-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .score-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: var(--accent2);
-  }
-
-  /* ---- HOME SCREEN ---- */
+  /* ---- HOME ---- */
   #home-screen {
     flex: 1;
     display: flex;
@@ -97,32 +71,11 @@
     text-align: center;
   }
 
-  .home-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 12vw, 8rem);
-    line-height: 0.9;
-    letter-spacing: 4px;
-    margin-bottom: 16px;
-    color: var(--text);
-  }
-
+  .home-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 12vw, 8rem); line-height: 0.9; letter-spacing: 4px; margin-bottom: 16px; color: var(--text); }
   .home-title span { color: var(--accent); }
+  .home-sub { color: var(--muted); font-size: 1rem; font-style: italic; margin-bottom: 56px; max-width: 400px; }
 
-  .home-sub {
-    color: var(--muted);
-    font-size: 1rem;
-    font-style: italic;
-    margin-bottom: 56px;
-    max-width: 400px;
-  }
-
-  .mode-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    max-width: 700px;
-    width: 100%;
-  }
+  .mode-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; max-width: 700px; width: 100%; }
 
   .mode-card {
     background: var(--surface);
@@ -136,15 +89,7 @@
     overflow: hidden;
   }
 
-  .mode-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-
+  .mode-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; opacity: 0; transition: opacity 0.25s; }
   .mode-card.argue::before { background: linear-gradient(90deg, #ff3b3b, #ff6b35); }
   .mode-card.roast::before { background: linear-gradient(90deg, #ff6b35, #ffcc00); }
   .mode-card.flirt::before { background: linear-gradient(90deg, #ff3b8f, #ff6b35); }
@@ -152,57 +97,350 @@
 
   .mode-card:hover { border-color: #444; transform: translateY(-4px); }
   .mode-card:hover::before { opacity: 1; }
-
   .mode-card.argue:hover { border-color: #ff3b3b; }
   .mode-card.roast:hover { border-color: #ff6b35; }
   .mode-card.flirt:hover { border-color: #ff3b8f; }
   .mode-card.hype:hover { border-color: #3bff8f; }
+  .mode-card.coming-soon { opacity: 0.4; cursor: default; }
+  .mode-card.coming-soon:hover { transform: none; border-color: var(--border); }
 
   .mode-emoji { font-size: 2.5rem; margin-bottom: 12px; }
-
-  .mode-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 3px;
-    margin-bottom: 6px;
-  }
-
+  .mode-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; margin-bottom: 6px; }
   .mode-card.argue .mode-name { color: #ff3b3b; }
   .mode-card.roast .mode-name { color: #ff6b35; }
   .mode-card.flirt .mode-name { color: #ff3b8f; }
   .mode-card.hype .mode-name { color: #3bff8f; }
+  .mode-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .coming-soon-tag { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); border: 1px solid var(--border); border-radius: 3px; padding: 2px 8px; display: inline-block; margin-top: 8px; }
 
-  .mode-desc {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .mode-card.coming-soon {
-    opacity: 0.4;
-    cursor: default;
-  }
-
-  .mode-card.coming-soon:hover { transform: none; border-color: var(--border); }
-
-  .coming-soon-tag {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 2px 8px;
-    display: inline-block;
-    margin-top: 8px;
-  }
-
-  /* ---- SHARED GAME SCREENS ---- */
-  #game-screen {
+  /* ---- FLIRT SETUP SCREEN ---- */
+  #flirt-setup {
     display: none;
     flex: 1;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
   }
+
+  .flirt-hero {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .flirt-hero span { color: var(--flirt); text-shadow: 0 0 40px rgba(255,59,143,0.4); }
+
+  .flirt-sub { color: var(--muted); font-style: italic; margin-bottom: 40px; max-width: 400px; }
+
+  .flirt-form { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 20px; }
+
+  .flirt-section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); text-align: left; margin-bottom: 4px; }
+
+  .gender-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .gender-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .gender-btn:hover { border-color: var(--flirt); color: var(--flirt); }
+  .gender-btn.active { background: var(--flirt); border-color: var(--flirt); color: #fff; }
+
+  /* Character cards for flirt */
+  .flirt-char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .flirt-char-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .flirt-char-card:hover { border-color: #555; transform: translateY(-2px); }
+  .flirt-char-card.selected { border-color: var(--flirt); background: #1a0010; }
+
+  .flirt-char-avatar { font-size: 2.2rem; line-height: 1; }
+  .flirt-char-name { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 1px; color: var(--muted); }
+  .flirt-char-vibe { font-size: 0.65rem; color: #444; font-style: italic; line-height: 1.3; }
+  .flirt-char-card.selected .flirt-char-name { color: var(--flirt); }
+
+  .flirt-start-btn {
+    background: var(--flirt);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .flirt-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,59,143,0.4); }
+
+  /* ---- FLIRT CHAT (SMS style) ---- */
+  #flirt-chat {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .flirt-chat-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #0f0f0f;
+  }
+
+  .flirt-avatar-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--flirt), #ff6b35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .flirt-contact-info { flex: 1; }
+  .flirt-contact-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: var(--text); }
+  .flirt-contact-status { font-size: 0.75rem; color: var(--flirt); }
+
+  .flirt-meter-container { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .flirt-meter-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+
+  .flirt-meter {
+    width: 80px;
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .flirt-meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6b35, var(--flirt));
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .flirt-meter-score { font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; color: var(--flirt); }
+
+  .flirt-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #0d0d0d;
+  }
+
+  .flirt-messages::-webkit-scrollbar { width: 3px; }
+  .flirt-messages::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+  .flirt-msg { display: flex; flex-direction: column; animation: fadeUp 0.3s ease; max-width: 78%; }
+  .flirt-msg.them { align-self: flex-start; }
+  .flirt-msg.me { align-self: flex-end; }
+
+  .flirt-bubble {
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .flirt-msg.them .flirt-bubble {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    border-bottom-left-radius: 4px;
+    color: var(--text);
+  }
+
+  .flirt-msg.me .flirt-bubble {
+    background: linear-gradient(135deg, #3b0025, #1a0035);
+    border: 1px solid #4a0035;
+    border-bottom-right-radius: 4px;
+    color: var(--text);
+  }
+
+  .flirt-timestamp { font-size: 0.65rem; color: #333; margin-top: 4px; padding: 0 4px; }
+  .flirt-msg.me .flirt-timestamp { text-align: right; }
+
+  .flirt-typing {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 14px;
+    background: #1e1e1e;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+  }
+
+  .flirt-typing span { width: 6px; height: 6px; background: var(--flirt); border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.6; }
+  .flirt-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .flirt-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .flirt-input-area {
+    padding: 12px 16px;
+    background: #0f0f0f;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .flirt-input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 10px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    resize: none;
+    max-height: 100px;
+    transition: border-color 0.2s;
+  }
+
+  .flirt-input:focus { border-color: var(--flirt); }
+  .flirt-input::placeholder { color: #333; }
+
+  .flirt-send-btn {
+    background: var(--flirt);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .flirt-send-btn:hover { transform: scale(1.1); box-shadow: 0 4px 16px rgba(255,59,143,0.4); }
+  .flirt-send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .flirt-send-btn svg { width: 18px; height: 18px; fill: white; }
+
+  .round-counter-flirt { font-size: 0.65rem; color: #333; text-align: center; padding: 4px 0; text-transform: uppercase; letter-spacing: 1px; background: #0d0d0d; }
+
+  /* ---- FLIRT VERDICT ---- */
+  #flirt-verdict {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .flirt-verdict-emoji { font-size: 4rem; margin-bottom: 16px; }
+  .flirt-verdict-title { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 4px; color: var(--muted); margin-bottom: 16px; }
+
+  .flirt-gauge-container { width: 100%; max-width: 360px; margin-bottom: 24px; }
+
+  .flirt-gauge-track {
+    width: 100%;
+    height: 16px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .flirt-gauge-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6b35, var(--flirt), #ff3b8f);
+    border-radius: 8px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 20px rgba(255,59,143,0.4);
+  }
+
+  .flirt-gauge-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: #333; text-transform: uppercase; letter-spacing: 1px; }
+
+  .flirt-verdict-score { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 12vw, 8rem); line-height: 1; color: var(--flirt); text-shadow: 0 0 40px rgba(255,59,143,0.5); margin-bottom: 8px; }
+  .flirt-verdict-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--text); letter-spacing: 2px; margin-bottom: 16px; }
+  .flirt-verdict-summary { color: #aaa; font-size: 0.9rem; line-height: 1.7; font-style: italic; margin-bottom: 28px; max-width: 400px; }
+
+  /* Flirt share card */
+  #flirt-share-card {
+    background: #0f0f0f;
+    border: 1px solid #2a1a2a;
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 360px;
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #flirt-share-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff6b35, var(--flirt)); }
+
+  .flirt-card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem; letter-spacing: 4px; color: #333; margin-bottom: 4px; }
+  .flirt-card-mode { font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 3px; color: #2a2a2a; margin-bottom: 12px; }
+  .flirt-card-char { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .flirt-card-char-emoji { font-size: 1.8rem; }
+  .flirt-card-char-info { }
+  .flirt-card-char-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--flirt); letter-spacing: 1px; }
+  .flirt-card-char-vibe { font-size: 0.7rem; color: #444; font-style: italic; }
+  .flirt-card-score-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 4px; }
+  .flirt-card-score { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; color: var(--flirt); }
+  .flirt-card-denom { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: #2a2a2a; padding-bottom: 8px; }
+  .flirt-card-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--text); letter-spacing: 2px; margin-bottom: 12px; }
+  .flirt-card-footer { font-size: 0.65rem; color: #222; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* ---- SHARED GAME SCREENS ---- */
+  #game-screen { display: none; flex: 1; flex-direction: column; }
 
   #landing {
     flex: 1;
@@ -214,37 +452,11 @@
     text-align: center;
   }
 
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    line-height: 0.9;
-    letter-spacing: 4px;
-    margin-bottom: 16px;
-  }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 10vw, 8rem); line-height: 0.9; letter-spacing: 4px; margin-bottom: 16px; }
+  .hero-sub { color: var(--muted); font-size: 1rem; font-style: italic; margin-bottom: 40px; max-width: 420px; }
 
-  .hero-sub {
-    color: var(--muted);
-    font-size: 1rem;
-    font-style: italic;
-    margin-bottom: 40px;
-    max-width: 420px;
-  }
-
-  .topic-form {
-    width: 100%;
-    max-width: 620px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .topic-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-align: left;
-  }
+  .topic-form { width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 16px; }
+  .topic-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); text-align: left; }
 
   .topic-input {
     background: var(--surface);
@@ -264,35 +476,11 @@
   .topic-input:focus { border-color: var(--accent); }
   .topic-input::placeholder { color: #444; font-style: italic; }
 
-  .char-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-align: left;
-  }
+  .char-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); text-align: left; }
 
-  .char-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-    gap: 8px;
-    width: 100%;
-  }
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; width: 100%; }
 
-  .char-card {
-    background: var(--surface);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 6px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    text-align: center;
-  }
-
+  .char-card { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; padding: 12px 6px 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
   .char-card:hover { border-color: #555; transform: translateY(-2px); }
   .char-card.selected { border-color: var(--accent); background: #1a0000; }
   .char-emoji { font-size: 2rem; line-height: 1; }
@@ -302,139 +490,37 @@
   .difficulty-row { display: flex; gap: 8px; align-items: center; }
   .diff-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
 
-  .diff-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--muted);
-    padding: 6px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
+  .diff-btn { background: transparent; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); padding: 6px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
   .diff-btn:hover { border-color: var(--accent); color: var(--accent); }
   .diff-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  .start-btn {
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 3px;
-    padding: 16px 32px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
+  .start-btn { border: none; border-radius: 4px; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; padding: 16px 32px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
   .start-btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.2s; }
   .start-btn:hover { transform: translateY(-2px); }
   .start-btn:hover::after { opacity: 1; }
-  .start-btn:active { transform: translateY(0); }
 
-  .example-topics {
-    margin-top: 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    max-width: 620px;
-  }
-
-  .example-chip {
-    background: transparent;
-    border: 1px solid #2a2a2a;
-    border-radius: 100px;
-    color: #555;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
+  .example-topics { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 620px; }
+  .example-chip { background: transparent; border: 1px solid #2a2a2a; border-radius: 100px; color: #555; padding: 6px 14px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
   .example-chip:hover { border-color: #555; color: var(--text); }
 
-  /* ---- CHAT ---- */
-  #chat-screen {
-    flex: 1;
-    display: none;
-    flex-direction: column;
-    max-width: 760px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
+  #chat-screen { flex: 1; display: none; flex-direction: column; max-width: 760px; width: 100%; margin: 0 auto; padding: 0 16px; }
 
-  .topic-bar {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
+  .topic-bar { padding: 16px 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .topic-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
   .topic-text { font-style: italic; color: var(--accent2); font-size: 0.95rem; }
+  .char-indicator { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-  .char-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: auto;
-    font-size: 0.75rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .new-debate-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--muted);
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-  }
-
+  .new-debate-btn { background: transparent; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); padding: 6px 12px; font-size: 0.75rem; font-family: 'DM Sans', sans-serif; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
   .new-debate-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   .messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 24px; }
   .messages::-webkit-scrollbar { width: 4px; }
-  .messages::-webkit-scrollbar-track { background: transparent; }
   .messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
   .message { display: flex; gap: 12px; animation: fadeUp 0.3s ease; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   .message.user { flex-direction: row-reverse; }
 
-  .avatar {
-    width: 48px; height: 48px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
-
+  .avatar { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; margin-top: 4px; }
   .message.user .avatar { background: var(--user-bubble); border: 1px solid #2a2a4a; font-size: 1.4rem; }
   .message.ai .avatar { background: var(--ai-bubble); border: 1px solid #3a1010; }
 
@@ -447,61 +533,20 @@
   .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
   .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-  @keyframes bounce {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-6px); }
-  }
-
   .input-area { padding: 16px 0 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; }
 
-  .chat-input {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 14px 16px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    outline: none;
-    resize: none;
-    max-height: 120px;
-    transition: border-color 0.2s;
-  }
-
+  .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; resize: none; max-height: 120px; transition: border-color 0.2s; }
   .chat-input:focus { border-color: var(--accent); }
   .chat-input::placeholder { color: #444; }
 
-  .send-btn {
-    background: var(--accent);
-    border: none;
-    border-radius: 4px;
-    width: 46px; height: 46px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-
+  .send-btn { background: var(--accent); border: none; border-radius: 4px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
   .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(255,59,59,0.4); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
   .send-btn svg { width: 20px; height: 20px; fill: white; }
 
   .round-counter { font-size: 0.7rem; color: var(--muted); text-align: center; padding: 4px 0 0; text-transform: uppercase; letter-spacing: 1px; }
 
-  /* ---- VERDICT ---- */
-  #verdict-screen {
-    display: none;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 24px;
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-  }
+  #verdict-screen { display: none; flex: 1; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; max-width: 600px; margin: 0 auto; width: 100%; }
 
   .verdict-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 4px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
   .verdict-score { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 15vw, 10rem); line-height: 1; color: var(--accent2); text-shadow: 0 0 60px rgba(255,204,0,0.4); margin-bottom: 8px; }
@@ -512,19 +557,7 @@
   .score-bar-bg { height: 6px; background: #1a1a1a; border-radius: 3px; overflow: hidden; margin-top: 12px; }
   .score-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); width: 0%; }
 
-  #share-card {
-    background: #111;
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    padding: 28px 32px;
-    max-width: 420px;
-    width: 100%;
-    margin-bottom: 24px;
-    text-align: left;
-    position: relative;
-    overflow: hidden;
-  }
-
+  #share-card { background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 28px 32px; max-width: 420px; width: 100%; margin-bottom: 24px; text-align: left; position: relative; overflow: hidden; }
   #share-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
 
   .card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 4px; color: #444; margin-bottom: 4px; }
@@ -540,13 +573,10 @@
   .card-footer { font-size: 0.7rem; color: #333; text-transform: uppercase; letter-spacing: 2px; }
 
   .verdict-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-
   .btn-secondary { background: transparent; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
   .btn-secondary:hover { border-color: var(--text); color: var(--text); }
-
   .btn-download { background: var(--accent2); border: none; border-radius: 4px; color: #000; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,204,0,0.3); }
-
   .btn-primary { background: var(--accent); border: none; border-radius: 4px; color: white; padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
 
@@ -556,6 +586,7 @@
     .bubble { max-width: 90%; }
     .char-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
     .mode-grid { grid-template-columns: 1fr 1fr; }
+    .flirt-char-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); }
   }
 </style>
 </head>
@@ -569,7 +600,7 @@
     </div>
   </header>
 
-  <!-- HOME SCREEN -->
+  <!-- HOME -->
   <div id="home-screen">
     <div class="home-title">BANTER<span>BOX</span></div>
     <p class="home-sub">Pick your mode. Pick your opponent. See what you're made of.</p>
@@ -584,11 +615,10 @@
         <div class="mode-name">ROAST</div>
         <div class="mode-desc">Submit to the roast. Fire back with your best comebacks. See if you can take the heat.</div>
       </div>
-      <div class="mode-card flirt coming-soon">
+      <div class="mode-card flirt" data-mode="flirt">
         <div class="mode-emoji">&#128139;</div>
         <div class="mode-name">FLIRT</div>
-        <div class="mode-desc">Turn on the charm. Trade flirty lines and see if you've got what it takes.</div>
-        <span class="coming-soon-tag">Coming Soon</span>
+        <div class="mode-desc">Pick your match. Turn on the charm. Watch the flirt meter rise — or crash.</div>
       </div>
       <div class="mode-card hype coming-soon">
         <div class="mode-emoji">&#128170;</div>
@@ -599,10 +629,109 @@
     </div>
   </div>
 
-  <!-- GAME SCREEN (wraps landing + chat + verdict) -->
-  <div id="game-screen">
+  <!-- FLIRT SETUP -->
+  <div id="flirt-setup">
+    <div class="flirt-hero">TURN ON<br><span>THE CHARM</span></div>
+    <p class="flirt-sub">Pick who you are, who you want to flirt with, and let's see what you've got.</p>
+    <div class="flirt-form">
+      <div>
+        <div class="flirt-section-label">I am...</div>
+        <div class="gender-row" id="user-gender-row">
+          <button class="gender-btn active" data-gender="male">&#128104; Male</button>
+          <button class="gender-btn" data-gender="female">&#128105; Female</button>
+          <button class="gender-btn" data-gender="other">&#127752; Other</button>
+        </div>
+      </div>
+      <div>
+        <div class="flirt-section-label">I want to flirt with...</div>
+        <div class="gender-row" id="target-gender-row">
+          <button class="gender-btn" data-gender="female">&#128105; Women</button>
+          <button class="gender-btn active" data-gender="male">&#128104; Men</button>
+          <button class="gender-btn" data-gender="other">&#127752; Other</button>
+        </div>
+      </div>
+      <div>
+        <div class="flirt-section-label">Choose your match</div>
+        <div class="flirt-char-grid" id="flirt-char-grid"></div>
+      </div>
+      <div>
+        <div class="flirt-section-label">Vibe</div>
+        <div class="gender-row">
+          <button class="gender-btn flirt-diff active" data-diff="sweet">&#128149; Sweet</button>
+          <button class="gender-btn flirt-diff" data-diff="cheeky">&#128521; Cheeky</button>
+          <button class="gender-btn flirt-diff" data-diff="bold">&#128293; Bold</button>
+        </div>
+      </div>
+      <button class="flirt-start-btn" id="flirt-start-btn">START FLIRTING &#128139;</button>
+    </div>
+  </div>
 
-    <!-- LANDING -->
+  <!-- FLIRT CHAT -->
+  <div id="flirt-chat">
+    <div class="flirt-chat-header">
+      <div class="flirt-avatar-circle" id="flirt-chat-avatar"></div>
+      <div class="flirt-contact-info">
+        <div class="flirt-contact-name" id="flirt-contact-name"></div>
+        <div class="flirt-contact-status">online now &#128149;</div>
+      </div>
+      <div class="flirt-meter-container">
+        <div class="flirt-meter-label">Flirt Meter</div>
+        <div class="flirt-meter"><div class="flirt-meter-fill" id="flirt-meter-fill"></div></div>
+        <div class="flirt-meter-score" id="flirt-meter-score">0%</div>
+      </div>
+    </div>
+    <div class="flirt-messages" id="flirt-messages"></div>
+    <div class="round-counter-flirt" id="flirt-round-counter">Message 1 of 15</div>
+    <div class="flirt-input-area">
+      <textarea class="flirt-input" id="flirt-input" placeholder="Say something charming..." rows="1"></textarea>
+      <button class="flirt-send-btn" id="flirt-send-btn">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- FLIRT VERDICT -->
+  <div id="flirt-verdict">
+    <div class="flirt-verdict-emoji" id="flirt-verdict-emoji">&#128149;</div>
+    <div class="flirt-verdict-title">FLIRT SESSION COMPLETE</div>
+    <div class="flirt-verdict-score" id="flirt-verdict-score">72%</div>
+    <div class="flirt-verdict-label" id="flirt-verdict-label">Smooth Operator</div>
+    <div class="flirt-gauge-container">
+      <div class="flirt-gauge-track">
+        <div class="flirt-gauge-fill" id="flirt-gauge-fill"></div>
+      </div>
+      <div class="flirt-gauge-labels">
+        <span>Crash &amp; Burn</span>
+        <span>Lukewarm</span>
+        <span>On Fire</span>
+      </div>
+    </div>
+    <p class="flirt-verdict-summary" id="flirt-verdict-summary"></p>
+    <div id="flirt-share-card">
+      <div class="flirt-card-brand">BANTERBOX</div>
+      <div class="flirt-card-mode">FLIRT MODE</div>
+      <div class="flirt-card-char">
+        <div class="flirt-card-char-emoji" id="flirt-card-emoji"></div>
+        <div class="flirt-card-char-info">
+          <div class="flirt-card-char-name" id="flirt-card-name"></div>
+          <div class="flirt-card-char-vibe" id="flirt-card-vibe"></div>
+        </div>
+      </div>
+      <div class="flirt-card-score-row">
+        <div class="flirt-card-score" id="flirt-card-score">72%</div>
+      </div>
+      <div class="flirt-card-label" id="flirt-card-label">Smooth Operator</div>
+      <div class="flirt-card-footer">banterbox.co — Pick your mode. See what you're made of.</div>
+    </div>
+    <div class="verdict-actions">
+      <button class="btn-download" id="flirt-download-btn">&#11015; SAVE CARD</button>
+      <button class="btn-secondary" id="flirt-replay-btn">Try Again</button>
+      <button class="btn-primary" id="flirt-home-btn">New Game &#8594;</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN (Argue + Roast) -->
+  <div id="game-screen">
     <div id="landing">
       <div class="hero-title" id="hero-title"></div>
       <p class="hero-sub" id="hero-sub"></p>
@@ -622,7 +751,6 @@
       <div class="example-topics" id="example-topics"></div>
     </div>
 
-    <!-- CHAT -->
     <div id="chat-screen">
       <div class="topic-bar">
         <span class="topic-tag" id="topic-tag-label"></span>
@@ -643,11 +771,10 @@
       </div>
     </div>
 
-    <!-- VERDICT -->
     <div id="verdict-screen">
-      <div class="verdict-title" id="verdict-title">Round Over — Here's Your Verdict</div>
+      <div class="verdict-title" id="verdict-title"></div>
       <div class="verdict-score" id="verdict-score">7</div>
-      <div class="verdict-label" id="verdict-label">Decent Show</div>
+      <div class="verdict-label" id="verdict-label"></div>
       <div class="score-track">
         <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar"></div></div>
       </div>
@@ -673,26 +800,47 @@
         <button class="btn-primary" id="new-topic-btn">New Game &#8594;</button>
       </div>
     </div>
+  </div>
 
-  </div><!-- end game-screen -->
-</div>
+</div><!-- end app -->
 
 <script>
-  // ---- MODE CONFIGS ----
+  // ---- FLIRT CHARACTERS ----
+  const FEMALE_CHARS = [
+    { id: 'sofia', name: 'Sofia', emoji: '&#128150;', vibe: 'Confident & teasing', style: 'You are Sofia, a confident Mediterranean woman who loves playful banter. You are warm but never too easy. You tease cleverly, respond with wit, and give just enough encouragement to keep things interesting. You enjoy the chase.' },
+    { id: 'valentina', name: 'Valentina', emoji: '&#127798;', vibe: 'Fiery & passionate', style: 'You are Valentina, fiery and passionate. You never let the other person win too easily. You are expressive, dramatic in a fun way, and your flirting is intense and exciting. You challenge people.' },
+    { id: 'jade', name: 'Jade', emoji: '&#128526;', vibe: 'Cool & mysterious', style: 'You are Jade, cool and hard to read. You respond with short, intriguing replies that leave them wanting more. You are mysterious, occasionally cryptic, and never give too much away. Winning your attention feels like an achievement.' },
+    { id: 'mei', name: 'Mei', emoji: '&#127800;', vibe: 'Sweet but sharp', style: 'You are Mei, sweet and warm on the surface but with surprising sharp wit underneath. You are genuinely kind but will catch people off guard with clever observations. Your flirting is gentle but effective.' },
+    { id: 'vivienne', name: 'Vivienne', emoji: '&#127917;', vibe: 'Old Hollywood glamour', style: 'You are Vivienne, with old Hollywood glamour and effortless charm. You speak with elegance, drop clever cultural references, and make the other person feel like they are in a classic romance film. Sophisticated but playful.' },
+    { id: 'savannah', name: 'Savannah', emoji: '&#129312;', vibe: 'Southern charm', style: 'You are Savannah, Southern charm personified. You are warm, funny, and disarmingly friendly. You use charm and humour to flirt rather than obvious come-ons. Your wit is quick and your smile comes through in every message.' },
+    { id: 'roxy', name: 'Roxy', emoji: '&#128520;', vibe: 'Mischievous & bold', style: 'You are Roxy, mischievous and unpredictable. You love chaos in the best possible way. You say unexpected things, push boundaries playfully, and keep the other person constantly on their toes. Bold and unapologetic.' },
+    { id: 'elise', name: 'Elise', emoji: '&#10052;&#65039;', vibe: 'Ice queen thawing', style: 'You are Elise, cool and reserved at first — an ice queen who takes time to warm up. You start distant and gradually become warmer as the conversation improves. Earning your warmth feels genuinely rewarding.' },
+    { id: 'billie', name: 'Billie', emoji: '&#127928;', vibe: 'Alt & sarcastic', style: 'You are Billie, alternative and sarcastic with a secretly soft heart. You use irony and dry humour to flirt. You act unimpressed but are secretly enjoying yourself. Genuine moments slip through the sarcasm occasionally.' },
+    { id: 'luna', name: 'Luna', emoji: '&#127754;', vibe: 'Free spirit & deep', style: 'You are Luna, free-spirited and unexpectedly deep. You talk about feelings, the universe, and connections. Your flirting is dreamy and poetic. You make the other person feel genuinely seen and interesting.' }
+  ];
+
+  const MALE_CHARS = [
+    { id: 'marco', name: 'Marco', emoji: '&#128378;', vibe: 'Smooth Italian charm', style: 'You are Marco, smooth and charming with Italian flair. You are confident without being arrogant. You give genuine compliments, are attentive and warm, and make the other person feel special effortlessly.' },
+    { id: 'kai', name: 'Kai', emoji: '&#127940;', vibe: 'Laid-back & deep', style: 'You are Kai, a laid-back surfer type with surprising emotional depth. You are relaxed and fun on the surface but say genuinely interesting things. Your flirting feels effortless and natural.' },
+    { id: 'sebastian', name: 'Sebastian', emoji: '&#127913;', vibe: 'Gentleman with wit', style: 'You are Sebastian, an old-school gentleman with modern wit. You are respectful, attentive, and charming in a classic way. You open doors, give thoughtful responses, and make the other person feel genuinely valued.' },
+    { id: 'dante', name: 'Dante', emoji: '&#128293;', vibe: 'Intense & magnetic', style: 'You are Dante, intense and magnetic. You speak with passion and depth. Your flirting is direct and meaningful — you say what you mean. You are not afraid of genuine connection and make the other person feel your full attention.' },
+    { id: 'finn', name: 'Finn', emoji: '&#128514;', vibe: 'Funny & sweet', style: 'You are Finn, funny and self-deprecating with a genuinely sweet nature. You use humour to charm rather than smooth lines. You are vulnerable in a cute way, accidentally adorable, and surprisingly heartfelt.' },
+    { id: 'ethan', name: 'Ethan', emoji: '&#129492;', vibe: 'Mysterious & minimal', style: 'You are Ethan, mysterious with minimal words and maximum effect. You say little but make every word count. You are intriguing, slightly brooding, and make people want to know what you are thinking.' },
+    { id: 'river', name: 'River', emoji: '&#127925;', vibe: 'Creative & poetic', style: 'You are River, creative and poetic. You notice things other people miss, make beautiful observations, and your messages feel like they mean something. Sensitive and romantic in a genuine way.' },
+    { id: 'blake', name: 'Blake', emoji: '&#128170;', vibe: 'Confident but kind', style: 'You are Blake, confident without arrogance and genuinely kind. You are direct and honest in a warm way. Your flirting is straightforward and respectful — you say what you mean and mean what you say.' },
+    { id: 'theo', name: 'Theo', emoji: '&#129504;', vibe: 'Intellectual & dry', style: 'You are Theo, intellectual with dry humour and surprising romance underneath. You reference interesting ideas, challenge the other person gently, and are unexpectedly tender when the moment is right.' },
+    { id: 'zara', name: 'Zara', emoji: '&#127758;', vibe: 'Adventurous & worldly', style: 'You are Zara, adventurous and worldly. You have been everywhere, seen everything, and find genuine excitement in new connections. Your stories are fascinating and you make the other person feel like an adventure themselves.' }
+  ];
+
+  // ---- ARGUE/ROAST MODES ----
   const MODES = {
     argue: {
-      name: 'ARGUE',
-      emoji: '&#9876;&#65039;',
-      accentColor: '#ff3b3b',
-      heroLines: ['PICK', 'YOUR', 'HILL.'],
-      heroColors: ['var(--text)', 'var(--accent)', 'var(--text)'],
+      name: 'ARGUE', emoji: '&#9876;&#65039;', accentColor: '#ff3b3b',
+      heroLines: ['PICK', 'YOUR', 'HILL.'], heroColors: ['var(--text)', 'var(--accent)', 'var(--text)'],
       sub: 'State your take. Choose your opponent. Defend yourself — if you can.',
-      topicLabel: 'Your position',
-      topicPlaceholder: "e.g. 'Pineapple belongs on pizza' or 'Free will doesn't exist'",
-      topicTag: 'Your take:',
-      startBtn: 'START ARGUING →',
-      inputPlaceholder: 'Make your case...',
-      verdictTitle: 'Debate Over — Here\'s Your Verdict',
+      topicLabel: 'Your position', topicPlaceholder: "e.g. 'Pineapple belongs on pizza' or 'Free will doesn't exist'",
+      topicTag: 'Your take:', startBtn: 'START ARGUING →', inputPlaceholder: 'Make your case...',
+      verdictTitle: 'Debate Over — Here\'s Your Verdict', maxRounds: 5,
       examples: ['Pineapple belongs on pizza', 'Morning people are insufferable', 'Social media does more harm than good', 'Cats are better than dogs', 'Free will doesn\'t exist', 'Working from home is overrated'],
       characters: [
         { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'You are a cold, ruthless, razor-sharp debater. You argue with devastating logic and precision. You find the exact flaw in every argument and exploit it mercilessly. You never show warmth or concede ground.' },
@@ -709,73 +857,77 @@
         { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "Corporate buzzwords: 'circling back', 'bandwidth', 'moving the needle'. Passive-aggressively reference the user's performance. Never directly disagree — just performance-manage them out of the conversation." }
       ],
       buildPrompt: function(topic, difficulty, character) {
-        const diffStyle = { polite: 'Be respectful but persistent.', brutal: 'Be sharp, direct and relentless. Find real holes in their logic.', savage: 'Be utterly ruthless. Expose every flaw and inconsistency.' }[difficulty];
-        return character.style + '\n\nThe user\'s position is: "' + topic + '"\n\nArgue AGAINST this position, completely in character. ' + diffStyle + ' Keep responses punchy — 2-4 paragraphs. Stay in character.\n\nAfter 5 rounds (when asked), give a verdict IN CHARACTER:\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]';
+        const d = { polite: 'Be respectful but persistent.', brutal: 'Be sharp, direct and relentless.', savage: 'Be utterly ruthless. Expose every flaw.' }[difficulty];
+        return character.style + '\n\nThe user\'s position is: "' + topic + '"\n\nArgue AGAINST this in character. ' + d + ' 2-4 paragraphs max.\n\nAfter 5 rounds give verdict IN CHARACTER:\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences]';
       },
-      openingMessage: function(topic) { return 'The user\'s position is: "' + topic + '". Open the debate immediately, arguing against their position. Stay completely in character from the first word.'; }
+      openingMessage: function(topic) { return 'The user\'s position is: "' + topic + '". Open the debate immediately in character.'; }
     },
-
     roast: {
-      name: 'ROAST',
-      emoji: '&#128293;',
-      accentColor: '#ff6b35',
-      heroLines: ['TAKE', 'THE', 'HEAT.'],
-      heroColors: ['var(--text)', '#ff6b35', 'var(--text)'],
+      name: 'ROAST', emoji: '&#128293;', accentColor: '#ff6b35',
+      heroLines: ['TAKE', 'THE', 'HEAT.'], heroColors: ['var(--text)', '#ff6b35', 'var(--text)'],
       sub: 'Submit yourself to the roast. Fire back with your best comeback. See if you can take it.',
-      topicLabel: 'What should they roast you about?',
-      topicPlaceholder: "e.g. 'I still live with my parents at 32' or 'I failed my driving test 4 times' or 'I cry at adverts'",
-      topicTag: 'Roasting:',
-      startBtn: 'BRING IT ON →',
-      inputPlaceholder: 'Fire back your comeback...',
-      verdictTitle: 'Roast Over — Take Your Medicine',
+      topicLabel: 'What should they roast you about?', topicPlaceholder: "e.g. 'I still live with my parents at 32' or 'I failed my driving test 4 times'",
+      topicTag: 'Roasting:', startBtn: 'BRING IT ON →', inputPlaceholder: 'Fire back your comeback...',
+      verdictTitle: 'Roast Over — Take Your Medicine', maxRounds: 5,
       examples: ['I still live with my parents', 'I failed my driving test 4 times', 'I cry at adverts', 'I talk to my cat like it understands me', 'I\'ve never read a book cover to cover', 'I genuinely enjoy Mondays'],
       characters: [
-        { id: 'comedian', name: 'COMEDIAN', emoji: '&#127908;', style: 'You are a professional stand-up comedian doing a roast. Your insults are witty, well-timed, and genuinely funny. You build to punchlines, use callbacks, and make the roast feel like an art form. Sharp but always with a knowing wink.' },
-        { id: 'grandad', name: 'GRANDAD', emoji: '&#128116;', style: "You are an elderly grandad with absolutely no filter. You accidentally say devastating things without realising how brutal they are. Mix genuine warmth with completely unintentional savagery. Use old-fashioned phrases and occasionally go off topic about the war or how things were better in your day." },
-        { id: 'hr', name: 'HR MANAGER', emoji: '&#128203;', style: "You roast entirely in corporate HR speak. Every insult is wrapped in phrases like 'I want to flag some concerns', 'this is a development opportunity', 'we need to have a conversation about your behaviours'. Devastating but technically professional." },
-        { id: 'ex', name: 'YOUR EX', emoji: '&#128148;', style: "You know exactly where to hit because you've been there. Reference specific (made up) memories that highlight their flaws. Use phrases like 'this is exactly what you always do', 'I tried to tell you', and 'honestly I'm not even surprised'. Bitter but accurate." },
-        { id: 'professor', name: 'PROFESSOR', emoji: '&#127979;', style: "Intellectually devastating put-downs. Reference academic studies, historical precedents, and philosophical frameworks to explain why the person is a failure. Use long words. Be condescending in an educated way. Occasionally sigh deeply." },
-        { id: 'pubcrowd', name: 'PUB CROWD', emoji: '&#127867;', style: "You are an entire pub crowd piling on at once. Use 'OOOHHs' and 'AHHHs'. Different voices chime in. Someone always takes it too far. Someone else tries to defend the person then changes their mind. Chaotic, loud, and merciless." },
-        { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "You roast like a toddler — accidentally devastating. Say things like 'why is your face like that?', 'you smell funny', 'my daddy says people like you are silly'. Completely unaware of how brutal you are being. Occasionally get distracted by something shiny." },
-        { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'Cold, surgical, devastating roasts. No warmth. No humour. Just precise identification of every flaw and failure, delivered with the calm of someone who has already won.' }
+        { id: 'comedian', name: 'COMEDIAN', emoji: '&#127908;', style: 'You are a professional stand-up comedian doing a roast. Witty, well-timed, genuinely funny. Build to punchlines, use callbacks. Sharp but with a knowing wink.' },
+        { id: 'grandad', name: 'GRANDAD', emoji: '&#128116;', style: "Elderly grandad with no filter. Accidentally devastating. Mix genuine warmth with unintentional savagery. Use old-fashioned phrases. Occasionally go off topic about the war." },
+        { id: 'hr', name: 'HR MANAGER', emoji: '&#128203;', style: "Roast in corporate HR speak. Every insult wrapped in 'I want to flag some concerns', 'development opportunity', 'let\'s have a conversation about your behaviours'." },
+        { id: 'ex', name: 'YOUR EX', emoji: '&#128148;', style: "You know exactly where to hit. Reference specific memories that highlight flaws. Use 'this is exactly what you always do', 'I tried to tell you'. Bitter but accurate." },
+        { id: 'professor', name: 'PROFESSOR', emoji: '&#127979;', style: "Intellectually devastating. Reference academic studies and philosophical frameworks to explain why they are a failure. Use long words. Be condescending in an educated way." },
+        { id: 'pubcrowd', name: 'PUB CROWD', emoji: '&#127867;', style: "Entire pub piling on. Use OOOHHs and AHHHs. Different voices chime in. Someone always takes it too far. Chaotic, loud, merciless." },
+        { id: 'toddler', name: 'TODDLER', emoji: '&#128118;', style: "Accidentally devastating roasts. 'Why is your face like that?', 'you smell funny'. Completely unaware of how brutal you are. Occasionally distracted by something shiny." },
+        { id: 'nemesis', name: 'NEMESIS', emoji: '&#128520;', style: 'Cold, surgical, devastating roasts. No warmth. No humour. Just precise identification of every flaw, delivered with total calm.' }
       ],
       buildPrompt: function(topic, difficulty, character) {
-        const diffStyle = { polite: 'Keep it light and playful.', brutal: 'Be genuinely cutting and savage.', savage: 'Absolutely no mercy. Go for the jugular every time.' }[difficulty];
-        return character.style + '\n\nThe user has submitted themselves for a roast about: "' + topic + '"\n\nRoast them mercilessly, completely in character. ' + diffStyle + ' Keep each roast to 2-3 punchy lines. The user will fire back comebacks — rate their comeback briefly before hitting them again. Stay in character.\n\nAfter 5 rounds (when asked), give a verdict IN CHARACTER on how well they handled the roast:\nSCORE: [1-10]\nLABEL: [short label e.g. "Completely Destroyed" or "Took It Like A Champ"]\nSUMMARY: [2-3 sentences in character]';
+        const d = { polite: 'Keep it light and playful.', brutal: 'Be genuinely cutting and savage.', savage: 'Absolutely no mercy.' }[difficulty];
+        return character.style + '\n\nRoast the user about: "' + topic + '"\n\nRoast them in character. ' + d + ' 2-3 punchy lines. Rate their comeback briefly before hitting again.\n\nAfter 5 rounds give verdict IN CHARACTER:\nSCORE: [1-10]\nLABEL: [short label e.g. "Completely Destroyed" or "Took It Like A Champ"]\nSUMMARY: [2-3 sentences]';
       },
-      openingMessage: function(topic) { return 'The user has submitted for a roast about: "' + topic + '". Open with your first roast immediately. Stay completely in character. Make it sting.'; }
+      openingMessage: function(topic) { return 'The user submitted for a roast about: "' + topic + '". Open with your first roast immediately in character.'; }
     }
   };
 
   // ---- STATE ----
   let state = {
-    mode: null,
-    topic: '',
-    difficulty: 'brutal',
-    character: null,
-    messages: [],
-    round: 0,
-    maxRounds: 5,
-    isLoading: false
+    mode: null, topic: '', difficulty: 'brutal', character: null,
+    messages: [], round: 0, maxRounds: 5, isLoading: false,
+    flirt: { userGender: 'male', targetGender: 'female', character: null, diff: 'cheeky', round: 0, maxRounds: 15, flirtScore: 0, isLoading: false }
   };
 
-  // ---- HOME SCREEN ----
+  // ---- HOME ----
   document.querySelectorAll('.mode-card:not(.coming-soon)').forEach(function(card) {
-    card.addEventListener('click', function() {
-      const modeId = card.dataset.mode;
-      loadMode(modeId);
-    });
+    card.addEventListener('click', function() { loadMode(card.dataset.mode); });
   });
 
   document.getElementById('logo-btn').addEventListener('click', goHome);
 
+  function goHome() {
+    hideAll();
+    document.getElementById('home-screen').style.display = 'flex';
+    document.getElementById('home-screen').style.flexDirection = 'column';
+    document.getElementById('header-mode').style.display = 'none';
+    document.getElementById('header-score').style.display = 'none';
+  }
+
+  function hideAll() {
+    ['home-screen','flirt-setup','flirt-chat','flirt-verdict','game-screen'].forEach(function(id) {
+      document.getElementById(id).style.display = 'none';
+    });
+  }
+
+  // ---- FLIRT MODE ----
   function loadMode(modeId) {
+    if (modeId === 'flirt') {
+      loadFlirtSetup();
+      return;
+    }
     const mode = MODES[modeId];
     state.mode = modeId;
     state.character = mode.characters[0];
     state.difficulty = 'brutal';
+    state.maxRounds = mode.maxRounds;
 
-    // Hero title
     const heroEl = document.getElementById('hero-title');
     heroEl.innerHTML = '';
     mode.heroLines.forEach(function(line, i) {
@@ -798,7 +950,6 @@
     document.getElementById('verdict-title').textContent = mode.verdictTitle;
     document.getElementById('card-mode').textContent = mode.name + ' MODE';
 
-    // Build char grid
     const grid = document.getElementById('char-grid');
     grid.innerHTML = '';
     mode.characters.forEach(function(char, i) {
@@ -813,7 +964,6 @@
       grid.appendChild(card);
     });
 
-    // Examples
     const examplesEl = document.getElementById('example-topics');
     examplesEl.innerHTML = '';
     mode.examples.forEach(function(ex) {
@@ -824,12 +974,10 @@
       examplesEl.appendChild(chip);
     });
 
-    // Reset difficulty buttons
     document.querySelectorAll('.diff-btn').forEach(function(btn) { btn.classList.remove('active'); });
     document.querySelector('.diff-btn[data-diff="brutal"]').classList.add('active');
 
-    // Show game screen
-    document.getElementById('home-screen').style.display = 'none';
+    hideAll();
     const gs = document.getElementById('game-screen');
     gs.style.display = 'flex';
     gs.style.flexDirection = 'column';
@@ -841,7 +989,6 @@
     document.getElementById('score-bar').style.width = '0%';
   }
 
-  // Difficulty
   document.querySelectorAll('.diff-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.diff-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -850,7 +997,6 @@
     });
   });
 
-  // Start game
   document.getElementById('start-btn').addEventListener('click', startGame);
   document.getElementById('topic-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startGame(); }
@@ -859,16 +1005,11 @@
   async function startGame() {
     const topic = document.getElementById('topic-input').value.trim();
     if (!topic) return;
-
-    state.topic = topic;
-    state.messages = [];
-    state.round = 0;
-
+    state.topic = topic; state.messages = []; state.round = 0;
     document.getElementById('landing').style.display = 'none';
     document.getElementById('verdict-screen').style.display = 'none';
-    const chatScreen = document.getElementById('chat-screen');
-    chatScreen.style.display = 'flex';
-    chatScreen.style.flexDirection = 'column';
+    const cs = document.getElementById('chat-screen');
+    cs.style.display = 'flex'; cs.style.flexDirection = 'column';
     document.getElementById('chat-topic-display').textContent = '"' + topic + '"';
     document.getElementById('chat-char-emoji').innerHTML = state.character.emoji;
     document.getElementById('chat-char-name').textContent = state.character.name;
@@ -876,60 +1017,41 @@
     document.getElementById('header-score').style.display = 'flex';
     document.getElementById('score-bar').style.width = '0%';
     updateRoundCounter();
-
-    const mode = MODES[state.mode];
-    await sendToAI(mode.openingMessage(topic), true);
+    await sendToAI(MODES[state.mode].openingMessage(topic), true);
   }
 
   async function sendToAI(userContent, isOpener) {
     if (state.isLoading) return;
     state.isLoading = true;
     document.getElementById('send-btn').disabled = true;
-
     if (!isOpener) {
       state.round++;
       updateRoundCounter();
       state.messages.push({ role: 'user', content: userContent });
       addMessage('user', userContent);
     }
-
     const typingEl = addTyping();
-
     try {
       const messages = isOpener ? [{ role: 'user', content: userContent }] : state.messages;
-      const isLastRound = state.round >= state.maxRounds;
-      const finalInstruction = isLastRound ? '\n\nThis is the final round. After your response, give the verdict:\n\n---VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]' : '';
-
-      const lastMsg = isLastRound
-        ? [...messages.slice(0, -1), { role: 'user', content: messages[messages.length - 1].content + finalInstruction }]
-        : messages;
-
-      const mode = MODES[state.mode];
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ system: mode.buildPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
+      const isLast = state.round >= state.maxRounds;
+      const finalInst = isLast ? '\n\nFinal round. After response give verdict:\n\n---VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]' : '';
+      const lastMsg = isLast ? [...messages.slice(0,-1), { role: 'user', content: messages[messages.length-1].content + finalInst }] : messages;
+      const resp = await fetch('/api/chat', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: MODES[state.mode].buildPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
       });
-
-      const data = await response.json();
+      const data = await resp.json();
       const aiText = data.content && data.content[0] ? data.content[0].text : "I am speechless. You win.";
-
       typingEl.remove();
-
       if (aiText.includes('---VERDICT---')) {
         const parts = aiText.split('---VERDICT---');
-        const rebuttal = parts[0].trim();
-        if (rebuttal) { addMessage('ai', rebuttal); state.messages.push({ role: 'assistant', content: rebuttal }); }
+        if (parts[0].trim()) { addMessage('ai', parts[0].trim()); state.messages.push({ role: 'assistant', content: parts[0].trim() }); }
         setTimeout(function() { showVerdict(parts[1]); }, 1200);
       } else {
         addMessage('ai', aiText);
         state.messages.push({ role: 'assistant', content: aiText });
       }
-    } catch(err) {
-      typingEl.remove();
-      addMessage('ai', "Connection dropped. Probably for the best.");
-    }
-
+    } catch(e) { typingEl.remove(); addMessage('ai', "Connection dropped."); }
     state.isLoading = false;
     document.getElementById('send-btn').disabled = false;
     document.getElementById('chat-input').focus();
@@ -938,8 +1060,7 @@
   function addMessage(role, text) {
     const el = document.createElement('div');
     el.className = 'message ' + role;
-    const avatarContent = role === 'user' ? '&#128100;' : state.character.emoji;
-    el.innerHTML = '<div class="avatar">' + avatarContent + '</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+    el.innerHTML = '<div class="avatar">' + (role === 'user' ? '&#128100;' : state.character.emoji) + '</div><div class="bubble">' + text.replace(/\n/g,'<br>') + '</div>';
     document.getElementById('messages').appendChild(el);
     el.scrollIntoView({ behavior: 'smooth', block: 'end' });
     return el;
@@ -955,25 +1076,19 @@
   }
 
   function updateRoundCounter() {
-    document.getElementById('round-counter').textContent = state.round >= state.maxRounds ? 'Final round...' : 'Round ' + (state.round + 1) + ' of ' + state.maxRounds;
+    document.getElementById('round-counter').textContent = state.round >= state.maxRounds ? 'Final round...' : 'Round ' + (state.round+1) + ' of ' + state.maxRounds;
     document.getElementById('round-score').textContent = state.round;
   }
 
   document.getElementById('send-btn').addEventListener('click', handleSend);
-  document.getElementById('chat-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
-  });
-  document.getElementById('chat-input').addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-  });
+  document.getElementById('chat-input').addEventListener('keydown', function(e) { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();} });
+  document.getElementById('chat-input').addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
 
   function handleSend() {
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
     if (!text || state.isLoading) return;
-    input.value = '';
-    input.style.height = 'auto';
+    input.value = ''; input.style.height = 'auto';
     sendToAI(text);
   }
 
@@ -981,16 +1096,12 @@
     const scoreMatch = verdictText.match(/SCORE:\s*(\d+)/);
     const labelMatch = verdictText.match(/LABEL:\s*(.+)/);
     const summaryMatch = verdictText.match(/SUMMARY:\s*([\s\S]+)/);
-
     const score = scoreMatch ? parseInt(scoreMatch[1]) : 5;
     const label = labelMatch ? labelMatch[1].trim() : 'Game Over';
     const summary = summaryMatch ? summaryMatch[1].trim() : '';
-
     document.getElementById('chat-screen').style.display = 'none';
     const vs = document.getElementById('verdict-screen');
-    vs.style.display = 'flex';
-    vs.style.flexDirection = 'column';
-
+    vs.style.display = 'flex'; vs.style.flexDirection = 'column';
     document.getElementById('verdict-score').textContent = score;
     document.getElementById('verdict-label').textContent = label;
     document.getElementById('verdict-summary').textContent = summary;
@@ -999,12 +1110,11 @@
     document.getElementById('card-topic').textContent = '"' + state.topic + '"';
     document.getElementById('card-char-emoji').innerHTML = state.character.emoji;
     document.getElementById('card-char-name').textContent = 'vs ' + state.character.name;
-
-    setTimeout(function() { document.getElementById('score-bar').style.width = (score * 10) + '%'; }, 300);
+    setTimeout(function() { document.getElementById('score-bar').style.width = (score*10)+'%'; }, 300);
   }
 
   document.getElementById('download-btn').addEventListener('click', function() {
-    html2canvas(document.getElementById('share-card'), { backgroundColor: '#111111', scale: 2, useCORS: true }).then(function(canvas) {
+    html2canvas(document.getElementById('share-card'), { backgroundColor: '#111111', scale: 2 }).then(function(canvas) {
       const link = document.createElement('a');
       link.download = 'banterbox-result.png';
       link.href = canvas.toDataURL('image/png');
@@ -1015,18 +1125,246 @@
   document.getElementById('new-debate-btn').addEventListener('click', function() { loadMode(state.mode); });
   document.getElementById('new-topic-btn').addEventListener('click', goHome);
   document.getElementById('replay-btn').addEventListener('click', function() {
-    const topic = state.topic;
-    loadMode(state.mode);
-    setTimeout(function() { document.getElementById('topic-input').value = topic; }, 100);
+    const t = state.topic; loadMode(state.mode);
+    setTimeout(function() { document.getElementById('topic-input').value = t; }, 100);
   });
 
-  function goHome() {
-    document.getElementById('game-screen').style.display = 'none';
-    document.getElementById('home-screen').style.display = 'flex';
-    document.getElementById('home-screen').style.flexDirection = 'column';
-    document.getElementById('header-mode').style.display = 'none';
-    document.getElementById('header-score').style.display = 'none';
+  // ---- FLIRT SETUP ----
+  function loadFlirtSetup() {
+    hideAll();
+    const setup = document.getElementById('flirt-setup');
+    setup.style.display = 'flex'; setup.style.flexDirection = 'column';
+    document.getElementById('header-mode').textContent = 'FLIRT';
+    document.getElementById('header-mode').style.display = 'block';
+    state.flirt.userGender = 'male';
+    state.flirt.targetGender = 'female';
+    state.flirt.diff = 'cheeky';
+    buildFlirtChars();
   }
+
+  function buildFlirtChars() {
+    const chars = state.flirt.targetGender === 'female' ? FEMALE_CHARS : (state.flirt.targetGender === 'male' ? MALE_CHARS : [...FEMALE_CHARS, ...MALE_CHARS]);
+    state.flirt.character = chars[0];
+    const grid = document.getElementById('flirt-char-grid');
+    grid.innerHTML = '';
+    chars.forEach(function(char, i) {
+      const card = document.createElement('div');
+      card.className = 'flirt-char-card' + (i === 0 ? ' selected' : '');
+      card.innerHTML = '<div class="flirt-char-avatar">' + char.emoji + '</div><div class="flirt-char-name">' + char.name + '</div><div class="flirt-char-vibe">' + char.vibe + '</div>';
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.flirt-char-card').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        state.flirt.character = char;
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll('#user-gender-row .gender-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#user-gender-row .gender-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.flirt.userGender = btn.dataset.gender;
+    });
+  });
+
+  document.querySelectorAll('#target-gender-row .gender-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#target-gender-row .gender-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.flirt.targetGender = btn.dataset.gender;
+      buildFlirtChars();
+    });
+  });
+
+  document.querySelectorAll('.flirt-diff').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.flirt-diff').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.flirt.diff = btn.dataset.diff;
+    });
+  });
+
+  document.getElementById('flirt-start-btn').addEventListener('click', startFlirt);
+
+  function buildFlirtPrompt() {
+    const char = state.flirt.character;
+    const diffStyle = {
+      sweet: 'Keep the flirting warm, sweet and romantic. Playful but gentle.',
+      cheeky: 'Be playful, witty and a little cheeky. Fun and light-hearted with a spark.',
+      bold: 'Be bold and confident. Direct but always respectful and charming.'
+    }[state.flirt.diff];
+
+    return char.style + '\n\n' +
+      'You are flirting with someone via text message. Keep responses to 1-3 sentences — this is SMS style. Use emojis naturally. ' + diffStyle + '\n\n' +
+      'IMPORTANT RULES:\n' +
+      '- Keep it flirty, fun and respectful at all times\n' +
+      '- Never produce explicit, sexual or inappropriate content\n' +
+      '- If the user says anything inappropriate, offensive or tries to push explicit content, respond with something like "Whoa, let\'s keep it classy 😏" and redirect\n' +
+      '- After each response, on a new line add: FLIRT_SCORE:[number 0-100] based on how charming their last message was\n' +
+      '- After 15 messages (when asked), give a final verdict:\n\n' +
+      '---FLIRT_VERDICT---\nSCORE: [0-100]\nLABEL: [e.g. "Smooth Operator" or "Crash & Burn" or "Hidden Gem" or "Adorably Awkward"]\nSUMMARY: [2-3 sentences in character about how the flirt session went]\nEMOJI: [single emoji that sums it up]';
+  }
+
+  async function startFlirt() {
+    const char = state.flirt.character;
+    state.flirt.round = 0;
+    state.flirt.flirtScore = 30;
+    state.flirt.messages = [];
+    state.flirt.isLoading = false;
+
+    hideAll();
+    const fc = document.getElementById('flirt-chat');
+    fc.style.display = 'flex'; fc.style.flexDirection = 'column';
+
+    document.getElementById('flirt-chat-avatar').innerHTML = char.emoji;
+    document.getElementById('flirt-contact-name').textContent = char.name;
+    document.getElementById('flirt-messages').innerHTML = '';
+    updateFlirtMeter(30);
+    updateFlirtRoundCounter();
+
+    await sendFlirtMessage('Open the conversation with a charming, in-character opening line. Just 1-2 sentences. Set the tone.', true);
+  }
+
+  async function sendFlirtMessage(userContent, isOpener) {
+    if (state.flirt.isLoading) return;
+    state.flirt.isLoading = true;
+    document.getElementById('flirt-send-btn').disabled = true;
+
+    if (!isOpener) {
+      state.flirt.round++;
+      updateFlirtRoundCounter();
+      state.flirt.messages.push({ role: 'user', content: userContent });
+      addFlirtMessage('me', userContent);
+    }
+
+    const typingEl = addFlirtTyping();
+
+    try {
+      const messages = isOpener ? [{ role: 'user', content: userContent }] : state.flirt.messages;
+      const isLast = state.flirt.round >= state.flirt.maxRounds;
+      const finalInst = isLast ? '\n\nThis is the final message. After your reply give the verdict:\n\n---FLIRT_VERDICT---\nSCORE: [0-100]\nLABEL: [short label]\nSUMMARY: [2-3 sentences in character]\nEMOJI: [single emoji]' : '';
+      const lastMsg = isLast ? [...messages.slice(0,-1), { role: 'user', content: messages[messages.length-1].content + finalInst }] : messages;
+
+      const resp = await fetch('/api/chat', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: buildFlirtPrompt(), messages: lastMsg })
+      });
+      const data = await resp.json();
+      let aiText = data.content && data.content[0] ? data.content[0].text : "Hey 😊";
+
+      typingEl.remove();
+
+      if (aiText.includes('---FLIRT_VERDICT---')) {
+        const parts = aiText.split('---FLIRT_VERDICT---');
+        const reply = extractFlirtReply(parts[0]);
+        if (reply) { addFlirtMessage('them', reply); state.flirt.messages.push({ role: 'assistant', content: parts[0] }); }
+        setTimeout(function() { showFlirtVerdict(parts[1]); }, 1500);
+      } else {
+        const scoreMatch = aiText.match(/FLIRT_SCORE:(\d+)/);
+        if (scoreMatch && !isOpener) {
+          const newScore = Math.min(100, Math.max(0, parseInt(scoreMatch[1])));
+          state.flirt.flirtScore = Math.round((state.flirt.flirtScore * 0.6) + (newScore * 0.4));
+          updateFlirtMeter(state.flirt.flirtScore);
+        }
+        const reply = extractFlirtReply(aiText);
+        addFlirtMessage('them', reply);
+        state.flirt.messages.push({ role: 'assistant', content: aiText });
+      }
+    } catch(e) { typingEl.remove(); addFlirtMessage('them', "Hey, you still there? 😊"); }
+
+    state.flirt.isLoading = false;
+    document.getElementById('flirt-send-btn').disabled = false;
+    document.getElementById('flirt-input').focus();
+  }
+
+  function extractFlirtReply(text) {
+    return text.replace(/FLIRT_SCORE:\d+/g, '').replace(/---FLIRT_VERDICT---[\s\S]*/g, '').trim();
+  }
+
+  function addFlirtMessage(who, text) {
+    const el = document.createElement('div');
+    el.className = 'flirt-msg ' + who;
+    const now = new Date();
+    const time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+    el.innerHTML = '<div class="flirt-bubble">' + text.replace(/\n/g,'<br>') + '</div><div class="flirt-timestamp">' + time + '</div>';
+    document.getElementById('flirt-messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
+
+  function addFlirtTyping() {
+    const el = document.createElement('div');
+    el.className = 'flirt-msg them';
+    el.innerHTML = '<div class="flirt-typing"><span></span><span></span><span></span></div>';
+    document.getElementById('flirt-messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function updateFlirtMeter(score) {
+    document.getElementById('flirt-meter-fill').style.width = score + '%';
+    document.getElementById('flirt-meter-score').textContent = score + '%';
+  }
+
+  function updateFlirtRoundCounter() {
+    const r = state.flirt.round;
+    const max = state.flirt.maxRounds;
+    document.getElementById('flirt-round-counter').textContent = r >= max ? 'Final message...' : 'Message ' + (r+1) + ' of ' + max;
+  }
+
+  document.getElementById('flirt-send-btn').addEventListener('click', handleFlirtSend);
+  document.getElementById('flirt-input').addEventListener('keydown', function(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleFlirtSend();} });
+  document.getElementById('flirt-input').addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
+
+  function handleFlirtSend() {
+    const input = document.getElementById('flirt-input');
+    const text = input.value.trim();
+    if (!text || state.flirt.isLoading) return;
+    input.value = ''; input.style.height = 'auto';
+    sendFlirtMessage(text);
+  }
+
+  function showFlirtVerdict(verdictText) {
+    const scoreMatch = verdictText.match(/SCORE:\s*(\d+)/);
+    const labelMatch = verdictText.match(/LABEL:\s*(.+)/);
+    const summaryMatch = verdictText.match(/SUMMARY:\s*([\s\S]+?)(?=EMOJI:|$)/);
+    const emojiMatch = verdictText.match(/EMOJI:\s*(.+)/);
+
+    const score = scoreMatch ? parseInt(scoreMatch[1]) : 50;
+    const label = labelMatch ? labelMatch[1].trim() : 'Nice Try';
+    const summary = summaryMatch ? summaryMatch[1].trim() : '';
+    const emoji = emojiMatch ? emojiMatch[1].trim() : '&#128149;';
+
+    hideAll();
+    const fv = document.getElementById('flirt-verdict');
+    fv.style.display = 'flex'; fv.style.flexDirection = 'column';
+
+    document.getElementById('flirt-verdict-emoji').innerHTML = emoji;
+    document.getElementById('flirt-verdict-score').textContent = score + '%';
+    document.getElementById('flirt-verdict-label').textContent = label;
+    document.getElementById('flirt-verdict-summary').textContent = summary;
+
+    document.getElementById('flirt-card-emoji').innerHTML = state.flirt.character.emoji;
+    document.getElementById('flirt-card-name').textContent = state.flirt.character.name;
+    document.getElementById('flirt-card-vibe').textContent = state.flirt.character.vibe;
+    document.getElementById('flirt-card-score').textContent = score + '%';
+    document.getElementById('flirt-card-label').textContent = label;
+
+    setTimeout(function() { document.getElementById('flirt-gauge-fill').style.width = score + '%'; }, 300);
+  }
+
+  document.getElementById('flirt-download-btn').addEventListener('click', function() {
+    html2canvas(document.getElementById('flirt-share-card'), { backgroundColor: '#0f0f0f', scale: 2 }).then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = 'banterbox-flirt.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  document.getElementById('flirt-replay-btn').addEventListener('click', loadFlirtSetup);
+  document.getElementById('flirt-home-btn').addEventListener('click', goHome);
+
 </script>
 </body>
 </html>
