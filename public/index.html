@@ -580,6 +580,196 @@
   .btn-primary { background: var(--accent); border: none; border-radius: 4px; color: white; padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
 
+  /* ---- HYPE MODE ---- */
+  #hype-screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .hype-hero {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 12vw, 8rem);
+    line-height: 0.85;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .hype-hero span { color: #3bff8f; text-shadow: 0 0 40px rgba(59,255,143,0.4); }
+
+  .hype-sub { color: var(--muted); font-style: italic; margin-bottom: 40px; max-width: 420px; }
+
+  .hype-form { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+  .hype-char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .hype-char-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .hype-char-card:hover { border-color: #555; transform: translateY(-2px); }
+  .hype-char-card.selected { border-color: #3bff8f; background: #0a1a0f; }
+  .hype-char-avatar { font-size: 2.2rem; line-height: 1; }
+  .hype-char-name { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 1px; color: var(--muted); }
+  .hype-char-vibe { font-size: 0.65rem; color: #444; font-style: italic; line-height: 1.3; }
+  .hype-char-card.selected .hype-char-name { color: #3bff8f; }
+
+  .hype-textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    width: 100%;
+    resize: none;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+
+  .hype-textarea:focus { border-color: #3bff8f; }
+  .hype-textarea::placeholder { color: #444; font-style: italic; }
+
+  .hype-start-btn {
+    background: #3bff8f;
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .hype-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59,255,143,0.4); }
+
+  /* Hype chat */
+  #hype-chat {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .hype-topic-bar {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hype-char-indicator { display: flex; align-items: center; gap: 6px; margin-left: auto; font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  .hype-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-bottom: 24px; }
+  .hype-messages::-webkit-scrollbar { width: 4px; }
+  .hype-messages::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+  .hype-message { display: flex; gap: 12px; animation: fadeUp 0.3s ease; }
+  .hype-message.user { flex-direction: row-reverse; }
+
+  .hype-avatar { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; margin-top: 4px; }
+  .hype-message.user .hype-avatar { background: #0a1a10; border: 1px solid #1a3a20; font-size: 1.4rem; }
+  .hype-message.ai .hype-avatar { background: #0a1a10; border: 1px solid #1a4a25; }
+
+  .hype-bubble { max-width: 80%; padding: 14px 18px; border-radius: 4px; font-size: 0.95rem; line-height: 1.6; }
+  .hype-message.user .hype-bubble { background: #0d1f12; border: 1px solid #1a3a20; border-top-right-radius: 0; }
+  .hype-message.ai .hype-bubble { background: #081510; border: 1px solid #1a4a25; border-top-left-radius: 0; }
+
+  .hype-typing-indicator { display: flex; gap: 4px; align-items: center; padding: 8px 0; }
+  .hype-typing-indicator span { width: 6px; height: 6px; background: #3bff8f; border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.6; }
+  .hype-typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .hype-typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+  .hype-input-area { padding: 16px 0 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; }
+
+  .hype-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; resize: none; max-height: 120px; transition: border-color 0.2s; }
+  .hype-input:focus { border-color: #3bff8f; }
+  .hype-input::placeholder { color: #444; }
+
+  .hype-send-btn { background: #3bff8f; border: none; border-radius: 4px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .hype-send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(59,255,143,0.4); }
+  .hype-send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .hype-send-btn svg { width: 20px; height: 20px; fill: #000; }
+
+  .hype-round-counter { font-size: 0.7rem; color: var(--muted); text-align: center; padding: 4px 0 0; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Hype verdict */
+  #hype-verdict {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hype-verdict-emoji { font-size: 4rem; margin-bottom: 16px; }
+  .hype-verdict-pretitle { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--muted); margin-bottom: 12px; }
+  .hype-verdict-score { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 12vw, 8rem); line-height: 1; color: #3bff8f; text-shadow: 0 0 40px rgba(59,255,143,0.5); margin-bottom: 4px; }
+  .hype-verdict-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--text); letter-spacing: 2px; margin-bottom: 12px; }
+  .hype-verdict-tagline { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: #3bff8f; letter-spacing: 2px; margin-bottom: 20px; font-style: italic; }
+  .hype-verdict-summary { color: #aaa; font-size: 0.9rem; line-height: 1.7; font-style: italic; margin-bottom: 28px; max-width: 440px; }
+
+  #hype-share-card {
+    background: #080f0a;
+    border: 1px solid #1a3a20;
+    border-radius: 12px;
+    padding: 24px 28px;
+    max-width: 380px;
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hype-share-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #3bff8f, #ffcc00); }
+
+  .hype-card-brand { font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem; letter-spacing: 4px; color: #1a3a20; margin-bottom: 2px; }
+  .hype-card-mode { font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 3px; color: #1a2a1a; margin-bottom: 12px; }
+  .hype-card-char { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .hype-card-char-emoji { font-size: 1.8rem; }
+  .hype-card-char-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: #3bff8f; letter-spacing: 1px; }
+  .hype-card-char-vibe { font-size: 0.7rem; color: #2a4a2a; font-style: italic; }
+  .hype-card-score { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; color: #3bff8f; margin-bottom: 4px; }
+  .hype-card-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--text); letter-spacing: 2px; margin-bottom: 8px; }
+  .hype-card-tagline { font-size: 0.8rem; color: #2a5a2a; font-style: italic; border-left: 2px solid #1a3a1a; padding-left: 10px; margin-bottom: 14px; line-height: 1.5; }
+  .hype-card-footer { font-size: 0.65rem; color: #1a2a1a; text-transform: uppercase; letter-spacing: 2px; }
+
   @media (max-width: 480px) {
     header { padding: 16px 20px; }
     .logo { font-size: 1.5rem; }
@@ -620,11 +810,10 @@
         <div class="mode-name">FLIRT</div>
         <div class="mode-desc">Pick your match. Turn on the charm. Watch the flirt meter rise — or crash.</div>
       </div>
-      <div class="mode-card hype coming-soon">
+      <div class="mode-card hype" data-mode="hype">
         <div class="mode-emoji">&#128170;</div>
         <div class="mode-name">HYPE</div>
-        <div class="mode-desc">Share your idea or goal and get fired up with personalised encouragement.</div>
-        <span class="coming-soon-tag">Coming Soon</span>
+        <div class="mode-desc">Share your goal, idea or struggle. Get fired up with personalised encouragement.</div>
       </div>
     </div>
   </div>
@@ -727,6 +916,74 @@
       <button class="btn-download" id="flirt-download-btn">&#11015; SAVE CARD</button>
       <button class="btn-secondary" id="flirt-replay-btn">Try Again</button>
       <button class="btn-primary" id="flirt-home-btn">New Game &#8594;</button>
+    </div>
+  </div>
+
+  <!-- HYPE SETUP -->
+  <div id="hype-screen">
+    <div class="hype-hero">YOU'VE<br>GOT <span>THIS.</span></div>
+    <p class="hype-sub">Share what you're working on. Pick your hype person. Get fired up.</p>
+    <div class="hype-form">
+      <div>
+        <div class="flirt-section-label">What do you want hype for?</div>
+        <textarea class="hype-textarea" id="hype-topic-input" placeholder="e.g. 'I'm launching my first business next week' or 'I've been trying to get fit for months and keep giving up'"></textarea>
+      </div>
+      <div>
+        <div class="flirt-section-label">Choose your hype person</div>
+        <div class="hype-char-grid" id="hype-char-grid"></div>
+      </div>
+      <button class="hype-start-btn" id="hype-start-btn">HYPE ME UP &#128170;</button>
+    </div>
+  </div>
+
+  <!-- HYPE CHAT -->
+  <div id="hype-chat">
+    <div class="hype-topic-bar">
+      <span class="topic-tag">Hyping:</span>
+      <span class="topic-text" id="hype-topic-display"></span>
+      <div class="hype-char-indicator">
+        <span id="hype-chat-char-emoji" style="font-size:1.3rem"></span>
+        <span id="hype-chat-char-name"></span>
+      </div>
+      <button class="new-debate-btn" id="hype-new-btn">New Game</button>
+    </div>
+    <div class="hype-messages" id="hype-messages"></div>
+    <div class="hype-round-counter" id="hype-round-counter">Round 1 of 8</div>
+    <div class="hype-input-area">
+      <textarea class="hype-input" id="hype-input" rows="1" placeholder="Tell them more..."></textarea>
+      <button class="hype-send-btn" id="hype-send-btn">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- HYPE VERDICT -->
+  <div id="hype-verdict">
+    <div class="hype-verdict-emoji" id="hype-verdict-emoji">&#128170;</div>
+    <div class="hype-verdict-pretitle">HYPE SESSION COMPLETE</div>
+    <div class="hype-verdict-score" id="hype-verdict-score">9</div>
+    <div class="hype-verdict-label" id="hype-verdict-label">UNSTOPPABLE</div>
+    <div class="hype-verdict-tagline" id="hype-verdict-tagline"></div>
+    <p class="hype-verdict-summary" id="hype-verdict-summary"></p>
+    <div id="hype-share-card">
+      <div class="hype-card-brand">BANTERBOX</div>
+      <div class="hype-card-mode">HYPE MODE</div>
+      <div class="hype-card-char">
+        <div class="hype-card-char-emoji" id="hype-card-char-emoji"></div>
+        <div>
+          <div class="hype-card-char-name" id="hype-card-char-name"></div>
+          <div class="hype-card-char-vibe" id="hype-card-char-vibe"></div>
+        </div>
+      </div>
+      <div class="hype-card-score" id="hype-card-score">9</div>
+      <div class="hype-card-label" id="hype-card-label">UNSTOPPABLE</div>
+      <div class="hype-card-tagline" id="hype-card-tagline"></div>
+      <div class="hype-card-footer">banterbox.co — Pick your mode. See what you're made of.</div>
+    </div>
+    <div class="verdict-actions">
+      <button class="btn-download" id="hype-download-btn">&#11015; SAVE CARD</button>
+      <button class="btn-secondary" id="hype-replay-btn">Go Again</button>
+      <button class="btn-primary" id="hype-home-btn">New Game &#8594;</button>
     </div>
   </div>
 
@@ -911,17 +1168,15 @@
   }
 
   function hideAll() {
-    ['home-screen','flirt-setup','flirt-chat','flirt-verdict','game-screen'].forEach(function(id) {
+    ['home-screen','flirt-setup','flirt-chat','flirt-verdict','hype-screen','hype-chat','hype-verdict','game-screen'].forEach(function(id) {
       document.getElementById(id).style.display = 'none';
     });
   }
 
   // ---- FLIRT MODE ----
   function loadMode(modeId) {
-    if (modeId === 'flirt') {
-      loadFlirtSetup();
-      return;
-    }
+    if (modeId === 'flirt') { loadFlirtSetup(); return; }
+    if (modeId === 'hype') { loadHypeSetup(); return; }
     const mode = MODES[modeId];
     state.mode = modeId;
     state.character = mode.characters[0];
@@ -1364,8 +1619,217 @@
     });
   });
 
-  document.getElementById('flirt-replay-btn').addEventListener('click', loadFlirtSetup);
-  document.getElementById('flirt-home-btn').addEventListener('click', goHome);
+  // ---- HYPE MODE ----
+  const HYPE_CHARS = [
+    { id: 'coach', name: 'The Coach', emoji: '&#127942;', vibe: 'Intense & relentless', style: 'You are a fiercely passionate sports coach. You believe in this person with your whole soul. Use locker room energy — intense, direct, motivating. Short punchy sentences. You have seen champions made from nothing. You are 100% certain this person has what it takes. Push them hard but with total belief.' },
+    { id: 'guru', name: 'The Guru', emoji: '&#129688;', vibe: 'Calm & deep', style: 'You are a calm, wise guru. You reframe everything with depth and perspective. You connect their goal to something larger — growth, purpose, the universe. Speak thoughtfully. Find the profound truth in what they are trying to do. Make them feel their journey matters deeply.' },
+    { id: 'nan', name: 'Nan', emoji: '&#128080;', vibe: 'Unconditional love', style: 'You are their nan. You think they hung the moon. You are endlessly proud of them for even trying. Use warm, slightly old-fashioned language. Occasionally mention biscuits, tea, or how you told everyone down at bingo about them. Absolutely unconditional belief and love.' },
+    { id: 'hypeman', name: 'Hype Man', emoji: '&#127908;', vibe: 'Chaotic energy', style: 'You are THE HYPE MAN. Pure chaotic positive energy. CAPS when excited. Exclamation marks everywhere. You are LOSING YOUR MIND at how incredible this person is. Occasionally say things like "LETS GOOOOO" or "NO WAY STOP IT". Over the top, hilarious, genuinely infectious enthusiasm.' },
+    { id: 'mentor', name: 'The Mentor', emoji: '&#128188;', vibe: 'Wise & experienced', style: 'You are a wise mentor who has been through it all. You have failed and succeeded. You speak from genuine experience. You validate their struggles while firmly redirecting their focus. You give concrete, thoughtful perspective. You make them feel truly seen and capable.' },
+    { id: 'activist', name: 'The Activist', emoji: '&#127758;', vibe: 'Bigger picture energy', style: 'You are a passionate activist and changemaker. You connect their personal goal to the bigger picture — their success ripples outward. You talk about impact, legacy, what the world looks like when people like them succeed. Passionate, visionary, inspiring.' },
+    { id: 'bestmate', name: 'Best Mate', emoji: '&#128526;', vibe: 'Casual & genuine', style: 'You are their absolute best mate. You are casual, funny, genuine. You take the piss a little but your belief in them is rock solid. Use natural language, maybe mild banter. You have seen them at their worst and you know they are brilliant. You would bet money on them.' },
+    { id: 'sergeant', name: 'Drill Sergeant', emoji: '&#128293;', vibe: 'No excuses, tough love', style: 'You are a drill sergeant. No excuses. No self-pity. You are not here to coddle — you are here to get results. Tough love but total belief. Short sharp commands. You have turned people who thought they had nothing into absolute machines. This person is no different. Get moving.' },
+    { id: 'dad', name: 'Dad', emoji: '&#128104;', vibe: 'Proud & steady', style: 'You are their dad. Quietly, deeply proud. You do not always say the right thing but your belief in them is unwavering. Occasionally awkward with emotions but it shines through. Say things like "I always knew you had it in you" or "your old man is proud". Steady, solid, genuine.' },
+    { id: 'mum', name: 'Mum', emoji: '&#128105;', vibe: 'Fierce & warm', style: 'You are their mum. Fiercely proud and protective. You will fight anyone who doubts them. Warm, loving, occasionally dramatic in a funny way. Ask if they have eaten. Tell them you have been telling all your friends about them. Your belief in them is absolute and loud.' }
+  ];
+
+  const HYPE_EXAMPLES = [
+    "I'm launching my first business next week",
+    "I've been trying to get fit and keep giving up",
+    "I'm going for a big promotion",
+    "I'm writing my first book",
+    "I want to make a major career change",
+    "I'm training for my first marathon"
+  ];
+
+  state.hype = { character: HYPE_CHARS[0], topic: '', messages: [], round: 0, maxRounds: 8, isLoading: false };
+
+  function loadHypeSetup() {
+    hideAll();
+    const hs = document.getElementById('hype-screen');
+    hs.style.display = 'flex'; hs.style.flexDirection = 'column';
+    document.getElementById('header-mode').textContent = 'HYPE';
+    document.getElementById('header-mode').style.display = 'block';
+    document.getElementById('header-score').style.display = 'none';
+    document.getElementById('hype-topic-input').value = '';
+
+    const grid = document.getElementById('hype-char-grid');
+    grid.innerHTML = '';
+    HYPE_CHARS.forEach(function(char, i) {
+      const card = document.createElement('div');
+      card.className = 'hype-char-card' + (i === 0 ? ' selected' : '');
+      card.innerHTML = '<div class="hype-char-avatar">' + char.emoji + '</div><div class="hype-char-name">' + char.name + '</div><div class="hype-char-vibe">' + char.vibe + '</div>';
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.hype-char-card').forEach(function(c) { c.classList.remove('selected'); });
+        card.classList.add('selected');
+        state.hype.character = char;
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  document.getElementById('hype-start-btn').addEventListener('click', function() {
+    const topic = document.getElementById('hype-topic-input').value.trim();
+    if (!topic) return;
+    startHype(topic);
+  });
+
+  async function startHype(topic) {
+    state.hype.topic = topic;
+    state.hype.messages = [];
+    state.hype.round = 0;
+    state.hype.isLoading = false;
+
+    hideAll();
+    const hc = document.getElementById('hype-chat');
+    hc.style.display = 'flex'; hc.style.flexDirection = 'column';
+    document.getElementById('hype-topic-display').textContent = '"' + topic + '"';
+    document.getElementById('hype-chat-char-emoji').innerHTML = state.hype.character.emoji;
+    document.getElementById('hype-chat-char-name').textContent = state.hype.character.name;
+    document.getElementById('hype-messages').innerHTML = '';
+    updateHypeRoundCounter();
+
+    await sendHypeMessage('Open with your first hype message for this person in character. Be immediate, personal and energising.', true);
+  }
+
+  function buildHypePrompt() {
+    return state.hype.character.style + '\n\n' +
+      'The person wants hype for: "' + state.hype.topic + '"\n\n' +
+      'RULES:\n' +
+      '- Ask questions to understand them better and build them up across the conversation\n' +
+      '- Keep responses to 2-4 sentences — punchy and energising\n' +
+      '- NEVER encourage anything illegal, dangerous, harmful or self-destructive\n' +
+      '- If they mention extreme dieting, self-harm, dangerous activities or anything harmful, respond with warmth, redirect gently, and suggest they speak to someone who can really help\n' +
+      '- If they seem in genuine distress rather than just nervous, be warm and suggest professional support\n' +
+      '- After ' + state.hype.maxRounds + ' rounds give a final verdict:\n\n' +
+      '---HYPE_VERDICT---\nSCORE: [1-10]\nLABEL: [e.g. "Unstoppable", "Rising Force", "Diamond in the Rough"]\nTAGLINE: [one killer motivational line personalised to them]\nSUMMARY: [2-3 sentences in character summing up the session]\nEMOJI: [single emoji]';
+  }
+
+  async function sendHypeMessage(userContent, isOpener) {
+    if (state.hype.isLoading) return;
+    state.hype.isLoading = true;
+    document.getElementById('hype-send-btn').disabled = true;
+
+    if (!isOpener) {
+      state.hype.round++;
+      updateHypeRoundCounter();
+      state.hype.messages.push({ role: 'user', content: userContent });
+      addHypeMessage('user', userContent);
+    }
+
+    const typingEl = addHypeTyping();
+
+    try {
+      const messages = isOpener ? [{ role: 'user', content: userContent }] : state.hype.messages;
+      const isLast = state.hype.round >= state.hype.maxRounds;
+      const finalInst = isLast ? '\n\nFinal round. After your response give the verdict:\n\n---HYPE_VERDICT---\nSCORE: [1-10]\nLABEL: [short label]\nTAGLINE: [one killer personalised line]\nSUMMARY: [2-3 sentences in character]\nEMOJI: [single emoji]' : '';
+      const lastMsg = isLast ? [...messages.slice(0,-1), { role: 'user', content: messages[messages.length-1].content + finalInst }] : messages;
+
+      const resp = await fetch('/api/chat', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: buildHypePrompt(), messages: lastMsg })
+      });
+      const data = await resp.json();
+      let aiText = data.content && data.content[0] ? data.content[0].text : "You've got this. I believe in you.";
+
+      typingEl.remove();
+
+      if (aiText.includes('---HYPE_VERDICT---')) {
+        const parts = aiText.split('---HYPE_VERDICT---');
+        if (parts[0].trim()) { addHypeMessage('ai', parts[0].trim()); state.hype.messages.push({ role: 'assistant', content: parts[0].trim() }); }
+        setTimeout(function() { showHypeVerdict(parts[1]); }, 1200);
+      } else {
+        addHypeMessage('ai', aiText);
+        state.hype.messages.push({ role: 'assistant', content: aiText });
+      }
+    } catch(e) { typingEl.remove(); addHypeMessage('ai', "You've got this. Keep going."); }
+
+    state.hype.isLoading = false;
+    document.getElementById('hype-send-btn').disabled = false;
+    document.getElementById('hype-input').focus();
+  }
+
+  function addHypeMessage(role, text) {
+    const el = document.createElement('div');
+    el.className = 'hype-message ' + role;
+    el.innerHTML = '<div class="hype-avatar">' + (role === 'user' ? '&#128100;' : state.hype.character.emoji) + '</div><div class="hype-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+    document.getElementById('hype-messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function addHypeTyping() {
+    const el = document.createElement('div');
+    el.className = 'hype-message ai';
+    el.innerHTML = '<div class="hype-avatar">' + state.hype.character.emoji + '</div><div class="hype-bubble"><div class="hype-typing-indicator"><span></span><span></span><span></span></div></div>';
+    document.getElementById('hype-messages').appendChild(el);
+    el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    return el;
+  }
+
+  function updateHypeRoundCounter() {
+    const r = state.hype.round;
+    const max = state.hype.maxRounds;
+    document.getElementById('hype-round-counter').textContent = r >= max ? 'Final round...' : 'Round ' + (r+1) + ' of ' + max;
+  }
+
+  document.getElementById('hype-send-btn').addEventListener('click', handleHypeSend);
+  document.getElementById('hype-input').addEventListener('keydown', function(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleHypeSend();} });
+  document.getElementById('hype-input').addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+
+  function handleHypeSend() {
+    const input = document.getElementById('hype-input');
+    const text = input.value.trim();
+    if (!text || state.hype.isLoading) return;
+    input.value = ''; input.style.height = 'auto';
+    sendHypeMessage(text);
+  }
+
+  function showHypeVerdict(verdictText) {
+    const scoreMatch = verdictText.match(/SCORE:\s*(\d+)/);
+    const labelMatch = verdictText.match(/LABEL:\s*(.+)/);
+    const taglineMatch = verdictText.match(/TAGLINE:\s*(.+)/);
+    const summaryMatch = verdictText.match(/SUMMARY:\s*([\s\S]+?)(?=EMOJI:|$)/);
+    const emojiMatch = verdictText.match(/EMOJI:\s*(.+)/);
+
+    const score = scoreMatch ? parseInt(scoreMatch[1]) : 8;
+    const label = labelMatch ? labelMatch[1].trim() : 'Unstoppable';
+    const tagline = taglineMatch ? taglineMatch[1].trim() : "You've got what it takes.";
+    const summary = summaryMatch ? summaryMatch[1].trim() : '';
+    const emoji = emojiMatch ? emojiMatch[1].trim() : '&#128170;';
+
+    hideAll();
+    const hv = document.getElementById('hype-verdict');
+    hv.style.display = 'flex'; hv.style.flexDirection = 'column';
+
+    document.getElementById('hype-verdict-emoji').innerHTML = emoji;
+    document.getElementById('hype-verdict-score').textContent = score;
+    document.getElementById('hype-verdict-label').textContent = label.toUpperCase();
+    document.getElementById('hype-verdict-tagline').textContent = '"' + tagline + '"';
+    document.getElementById('hype-verdict-summary').textContent = summary;
+
+    document.getElementById('hype-card-char-emoji').innerHTML = state.hype.character.emoji;
+    document.getElementById('hype-card-char-name').textContent = state.hype.character.name;
+    document.getElementById('hype-card-char-vibe').textContent = state.hype.character.vibe;
+    document.getElementById('hype-card-score').textContent = score;
+    document.getElementById('hype-card-label').textContent = label.toUpperCase();
+    document.getElementById('hype-card-tagline').textContent = '"' + tagline + '"';
+  }
+
+  document.getElementById('hype-download-btn').addEventListener('click', function() {
+    html2canvas(document.getElementById('hype-share-card'), { backgroundColor: '#080f0a', scale: 2 }).then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = 'banterbox-hype.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+
+  document.getElementById('hype-new-btn').addEventListener('click', loadHypeSetup);
+  document.getElementById('hype-replay-btn').addEventListener('click', loadHypeSetup);
+  document.getElementById('hype-home-btn').addEventListener('click', goHome);
+
+
 
 </script>
 </body>
