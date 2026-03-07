@@ -645,8 +645,8 @@
       <div>
         <div class="flirt-section-label">I want to flirt with...</div>
         <div class="gender-row" id="target-gender-row">
-          <button class="gender-btn" data-gender="female">&#128105; Women</button>
-          <button class="gender-btn active" data-gender="male">&#128104; Men</button>
+          <button class="gender-btn active" data-gender="female">&#128105; Women</button>
+          <button class="gender-btn" data-gender="male">&#128104; Men</button>
           <button class="gender-btn" data-gender="other">&#127752; Other</button>
         </div>
       </div>
@@ -1138,6 +1138,8 @@
     document.getElementById('header-mode').style.display = 'block';
     state.flirt.userGender = 'male';
     state.flirt.targetGender = 'female';
+    document.querySelectorAll('#target-gender-row .gender-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('#target-gender-row .gender-btn[data-gender="female"]').classList.add('active');
     state.flirt.diff = 'cheeky';
     buildFlirtChars();
   }
