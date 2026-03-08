@@ -580,6 +580,101 @@
   .btn-primary { background: var(--accent); border: none; border-radius: 4px; color: white; padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
 
+  /* ---- PAYWALL ---- */
+  .paywall-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .paywall-modal {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 40px 36px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .paywall-modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2), #3bff8f, var(--flirt)); }
+
+  .paywall-emoji { font-size: 3rem; margin-bottom: 16px; }
+  .paywall-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: var(--text); margin-bottom: 8px; }
+  .paywall-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 28px; }
+
+  .paywall-price {
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .paywall-price-amount { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--accent2); line-height: 1; }
+  .paywall-price-period { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .paywall-features { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 6px; }
+  .paywall-features li { font-size: 0.85rem; color: #aaa; display: flex; align-items: center; gap: 8px; }
+  .paywall-features li::before { content: '✓'; color: #3bff8f; font-weight: bold; flex-shrink: 0; }
+
+  .paywall-cta {
+    background: var(--accent2);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .paywall-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,204,0,0.4); }
+  .paywall-cta:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .paywall-dismiss { background: transparent; border: none; color: var(--muted); font-size: 0.8rem; cursor: pointer; text-decoration: underline; font-family: 'DM Sans', sans-serif; }
+  .paywall-dismiss:hover { color: var(--text); }
+
+  .pro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(90deg, #ffcc00, #ff6b35);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: #000;
+    margin-left: 8px;
+  }
+
+  .usage-indicator {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 6px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .usage-indicator.warning { color: #ff6b35; }
+  .usage-indicator.danger { color: var(--accent); }
+
   /* ---- HYPE MODE ---- */
   #hype-screen {
     display: none;
@@ -785,8 +880,12 @@
   <header>
     <div class="logo" id="logo-btn">BANTER<span>BOX</span></div>
     <div class="header-mode" id="header-mode"></div>
-    <div class="score-badge" id="header-score" style="display:none">
-      Round: <span class="score-num" id="round-score">0</span>/5
+    <div style="display:flex;align-items:center;gap:12px;margin-left:auto">
+      <div class="score-badge" id="header-score" style="display:none">
+        Round: <span class="score-num" id="round-score">0</span>/5
+      </div>
+      <div id="header-usage" style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:none"></div>
+      <button id="header-pro-btn" onclick="showPaywall()" style="display:none;background:linear-gradient(90deg,#ffcc00,#ff6b35);border:none;border-radius:100px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:0.75rem;letter-spacing:2px;padding:6px 14px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">GO PRO &#9889;</button>
     </div>
   </header>
 
@@ -916,6 +1015,7 @@
       <button class="btn-download" id="flirt-download-btn">&#11015; SAVE CARD</button>
       <button class="btn-secondary" id="flirt-replay-btn">Try Again</button>
       <button class="btn-primary" id="flirt-home-btn">New Game &#8594;</button>
+      <button id="flirt-verdict-pro-btn" onclick="showPaywall()" style="display:none;background:linear-gradient(90deg,#ffcc00,#ff6b35);border:none;border-radius:4px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:12px 20px;cursor:pointer;">&#9889; GO PRO — UNLIMITED</button>
     </div>
   </div>
 
@@ -984,6 +1084,7 @@
       <button class="btn-download" id="hype-download-btn">&#11015; SAVE CARD</button>
       <button class="btn-secondary" id="hype-replay-btn">Go Again</button>
       <button class="btn-primary" id="hype-home-btn">New Game &#8594;</button>
+      <button id="hype-verdict-pro-btn" onclick="showPaywall()" style="display:none;background:linear-gradient(90deg,#ffcc00,#ff6b35);border:none;border-radius:4px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:12px 20px;cursor:pointer;">&#9889; GO PRO — UNLIMITED</button>
     </div>
   </div>
 
@@ -1055,7 +1156,29 @@
         <button class="btn-download" id="download-btn">&#11015; SAVE CARD</button>
         <button class="btn-secondary" id="replay-btn">Play Again</button>
         <button class="btn-primary" id="new-topic-btn">New Game &#8594;</button>
+        <button id="verdict-pro-btn" onclick="showPaywall()" style="display:none;background:linear-gradient(90deg,#ffcc00,#ff6b35);border:none;border-radius:4px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:12px 20px;cursor:pointer;">&#9889; GO PRO — UNLIMITED</button>
       </div>
+    </div>
+  </div>
+
+  <!-- PAYWALL MODAL -->
+  <div class="paywall-overlay" id="paywall-overlay" style="display:none">
+    <div class="paywall-modal">
+      <div class="paywall-emoji">&#128293;</div>
+      <div class="paywall-title">YOU'RE ON FIRE</div>
+      <p class="paywall-sub">You've used your 3 free sessions for today. Come back tomorrow — or go Pro for unlimited access right now.</p>
+      <div class="paywall-price">
+        <div class="paywall-price-amount">$4.99</div>
+        <div class="paywall-price-period">per month</div>
+        <ul class="paywall-features">
+          <li>Unlimited sessions across all 4 modes</li>
+          <li>Argue, Roast, Flirt &amp; Hype — no limits</li>
+          <li>Early access to new modes as they drop</li>
+          <li>Cancel any time</li>
+        </ul>
+      </div>
+      <button class="paywall-cta" id="paywall-upgrade-btn">GO PRO — $4.99/month</button>
+      <button class="paywall-dismiss" id="paywall-dismiss-btn">Maybe tomorrow</button>
     </div>
   </div>
 
@@ -1293,7 +1416,7 @@
       const lastMsg = isLast ? [...messages.slice(0,-1), { role: 'user', content: messages[messages.length-1].content + finalInst }] : messages;
       const resp = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ system: MODES[state.mode].buildPrompt(state.topic, state.difficulty, state.character), messages: lastMsg })
+        body: JSON.stringify({ system: MODES[state.mode].buildPrompt(state.topic, state.difficulty, state.character), messages: lastMsg, isNewSession: isOpener })
       });
       const data = await resp.json();
       const aiText = data.content && data.content[0] ? data.content[0].text : "I am speechless. You win.";
@@ -1505,7 +1628,7 @@
 
       const resp = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ system: buildFlirtPrompt(), messages: lastMsg })
+        body: JSON.stringify({ system: buildFlirtPrompt(), messages: lastMsg, isNewSession: isOpener })
       });
       const data = await resp.json();
       let aiText = data.content && data.content[0] ? data.content[0].text : "Hey 😊";
@@ -1727,7 +1850,7 @@
 
       const resp = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ system: buildHypePrompt(), messages: lastMsg })
+        body: JSON.stringify({ system: buildHypePrompt(), messages: lastMsg, isNewSession: isOpener })
       });
       const data = await resp.json();
       let aiText = data.content && data.content[0] ? data.content[0].text : "You've got this. I believe in you.";
@@ -1828,6 +1951,129 @@
   document.getElementById('hype-new-btn').addEventListener('click', loadHypeSetup);
   document.getElementById('hype-replay-btn').addEventListener('click', loadHypeSetup);
   document.getElementById('hype-home-btn').addEventListener('click', goHome);
+
+  // ---- PRO / PAYWALL ----
+  let proToken = localStorage.getItem('bb_pro_token') || null;
+
+  async function checkUsage() {
+    try {
+      const resp = await nativeFetch('/api/usage');
+      const data = await resp.json();
+      return data;
+    } catch(e) { return { count: 0, limit: 3, remaining: 3 }; }
+  }
+
+  function showPaywall() {
+    document.getElementById('paywall-overlay').style.display = 'flex';
+  }
+
+  function hidePaywall() {
+    document.getElementById('paywall-overlay').style.display = 'none';
+  }
+
+  document.getElementById('paywall-dismiss-btn').addEventListener('click', hidePaywall);
+
+  document.getElementById('paywall-upgrade-btn').addEventListener('click', async function() {
+    const btn = document.getElementById('paywall-upgrade-btn');
+    btn.disabled = true;
+    btn.textContent = 'Loading...';
+    try {
+      const resp = await nativeFetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+      const data = await resp.json();
+      if (data.url) { window.location.href = data.url; }
+      else { btn.disabled = false; btn.textContent = 'GO PRO — $4.99/month'; }
+    } catch(e) { btn.disabled = false; btn.textContent = 'GO PRO — $4.99/month'; }
+  });
+
+  async function handleStripeReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('pro') === 'success') {
+      const sessionId = params.get('session_id');
+      if (sessionId) {
+        try {
+          const resp = await nativeFetch('/api/verify-pro', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+          });
+          const data = await resp.json();
+          if (data.valid && data.token) {
+            proToken = data.token;
+            localStorage.setItem('bb_pro_token', proToken);
+            updateProBadge();
+            goHome();
+            setTimeout(function() {
+              const sub = document.querySelector('.home-sub');
+              if (sub) {
+                sub.textContent = '🔥 Welcome to Pro! Unlimited sessions. Let\'s go.';
+                setTimeout(function() { sub.textContent = 'Pick your mode. Pick your opponent. See what you\'re made of.'; }, 4000);
+              }
+            }, 100);
+          }
+        } catch(e) {}
+      }
+      window.history.replaceState({}, '', '/');
+    }
+  }
+
+  function updateProBadge() {
+    if (proToken) {
+      const logo = document.getElementById('logo-btn');
+      logo.innerHTML = 'BANTER<span style="color:var(--accent)">BOX</span><span class="pro-badge">PRO</span>';
+    }
+  }
+
+  // Wrap all /api/chat calls to inject proToken and catch 429 limit
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = async function(url, opts) {
+    if (url === '/api/chat') {
+      if (opts && opts.body) {
+        try {
+          const body = JSON.parse(opts.body);
+          body.proToken = proToken;
+          opts.body = JSON.stringify(body);
+        } catch(e) {}
+      }
+      const resp = await nativeFetch(url, opts);
+      if (resp.status === 429) {
+        showPaywall();
+        // Return a dummy OK response so the calling code doesn't crash
+        return new Response(JSON.stringify({ content: [{ type: 'text', text: '' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return resp;
+    }
+    return nativeFetch(url, opts);
+  };
+
+  // Init on page load
+  handleStripeReturn();
+  updateProBadge();
+
+  // Show/hide Go Pro button and usage based on pro status
+  async function initUsageUI() {
+    if (proToken) {
+      document.getElementById('header-pro-btn').style.display = 'none';
+      document.getElementById('header-usage').style.display = 'none';
+      ['verdict-pro-btn','flirt-verdict-pro-btn','hype-verdict-pro-btn'].forEach(function(id) {
+        const el = document.getElementById(id); if(el) el.style.display = 'none';
+      });
+    } else {
+      const usage = await checkUsage();
+      const remaining = usage.remaining;
+      document.getElementById('header-pro-btn').style.display = 'block';
+      const usageEl = document.getElementById('header-usage');
+      usageEl.style.display = 'block';
+      usageEl.textContent = remaining + ' free ' + (remaining === 1 ? 'session' : 'sessions') + ' left today';
+      usageEl.style.color = remaining <= 1 ? '#ff3b3b' : remaining <= 2 ? '#ff6b35' : 'var(--muted)';
+      ['verdict-pro-btn','flirt-verdict-pro-btn','hype-verdict-pro-btn'].forEach(function(id) {
+        const el = document.getElementById(id); if(el) el.style.display = 'block';
+      });
+    }
+  }
+
+  initUsageUI();
+
+
+
 
 
 
