@@ -11,54 +11,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---- USAGE TRACKING (in-memory, resets on redeploy) ----
-// For production you'd use a database, but this works fine to start
-const usageStore = {};
-
-function getUsageKey(ip) {
-  const today = new Date().toISOString().split('T')[0];
-  return ip + '_' + today;
-}
-
-function getUsageCount(ip) {
-  return usageStore[getUsageKey(ip)] || 0;
-}
-
-function incrementUsage(ip) {
-  const key = getUsageKey(ip);
-  usageStore[key] = (usageStore[key] || 0) + 1;
-}
-
 function getClientIP(req) {
   return req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || 'unknown';
 }
 
-// ---- CHECK USAGE ----
-app.get('/api/usage', (req, res) => {
-  const ip = getClientIP(req);
-  const count = getUsageCount(ip);
-  res.json({ count, limit: 3, remaining: Math.max(0, 3 - count) });
-});
-
 // ---- CHAT ENDPOINT ----
 app.post('/api/chat', async (req, res) => {
-  const { messages, system, proToken, isNewSession } = req.body;
+  const { messages, system, proToken } = req.body;
   if (!messages || !system) return res.status(400).json({ error: 'Missing fields' });
 
-  const ip = getClientIP(req);
   const isPro = await verifyProToken(proToken);
 
-  if (!isPro) {
-    const count = getUsageCount(ip);
-    // Only count usage when a new session starts (first message of a game)
-    if (isNewSession) {
-      if (count >= 3) {
-        return res.status(429).json({ error: 'LIMIT_REACHED', message: 'Daily limit reached' });
-      }
-      incrementUsage(ip);
-    }
-  }
-
+  // Usage limiting is handled client-side via localStorage
+  // Server only blocks if pro token is invalid on a pro-only request
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
