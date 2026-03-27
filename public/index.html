@@ -2185,11 +2185,25 @@
   let proToken = localStorage.getItem('bb_pro_token') || null;
 
   async function checkUsage() {
-    try {
-      const resp = await nativeFetch('/api/usage');
-      const data = await resp.json();
-      return data;
-    } catch(e) { return { count: 0, limit: 3, remaining: 3 }; }
+    const today = new Date().toISOString().split('T')[0];
+    const stored = JSON.parse(localStorage.getItem('bb_usage') || '{}');
+    const count = stored.date === today ? (stored.count || 0) : 0;
+    return { count, limit: 3, remaining: Math.max(0, 3 - count) };
+  }
+
+  function incrementLocalUsage() {
+    const today = new Date().toISOString().split('T')[0];
+    const stored = JSON.parse(localStorage.getItem('bb_usage') || '{}');
+    const count = stored.date === today ? (stored.count || 0) : 0;
+    localStorage.setItem('bb_usage', JSON.stringify({ date: today, count: count + 1 }));
+  }
+
+  function isOverLimit() {
+    if (proToken) return false;
+    const today = new Date().toISOString().split('T')[0];
+    const stored = JSON.parse(localStorage.getItem('bb_usage') || '{}');
+    const count = stored.date === today ? (stored.count || 0) : 0;
+    return count >= 3;
   }
 
   function showPaywall() {
@@ -2251,23 +2265,26 @@
     }
   }
 
-  // Wrap all /api/chat calls to inject proToken and catch 429 limit
+  // Wrap all /api/chat calls to inject proToken and check usage limit
   const nativeFetch = window.fetch.bind(window);
   window.fetch = async function(url, opts) {
     if (url === '/api/chat') {
+      // Check limit before sending
+      if (isOverLimit()) {
+        showPaywall();
+        return new Response(JSON.stringify({ content: [{ type: 'text', text: '' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
       if (opts && opts.body) {
         try {
           const body = JSON.parse(opts.body);
+          // Inject proToken
           body.proToken = proToken;
+          // Count usage on new sessions
+          if (body.isNewSession && !proToken) { incrementLocalUsage(); updateUsageUI(); }
           opts.body = JSON.stringify(body);
         } catch(e) {}
       }
       const resp = await nativeFetch(url, opts);
-      if (resp.status === 429) {
-        showPaywall();
-        // Return a dummy OK response so the calling code doesn't crash
-        return new Response(JSON.stringify({ content: [{ type: 'text', text: '' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-      }
       return resp;
     }
     return nativeFetch(url, opts);
@@ -2278,7 +2295,7 @@
   updateProBadge();
 
   // Show/hide Go Pro button and usage based on pro status
-  async function initUsageUI() {
+  function updateUsageUI() {
     if (proToken) {
       document.getElementById('header-pro-btn').style.display = 'none';
       document.getElementById('header-usage').style.display = 'none';
@@ -2286,8 +2303,10 @@
         const el = document.getElementById(id); if(el) el.style.display = 'none';
       });
     } else {
-      const usage = await checkUsage();
-      const remaining = usage.remaining;
+      const today = new Date().toISOString().split('T')[0];
+      const stored = JSON.parse(localStorage.getItem('bb_usage') || '{}');
+      const count = stored.date === today ? (stored.count || 0) : 0;
+      const remaining = Math.max(0, 3 - count);
       document.getElementById('header-pro-btn').style.display = 'block';
       const usageEl = document.getElementById('header-usage');
       usageEl.style.display = 'block';
@@ -2298,6 +2317,8 @@
       });
     }
   }
+
+  async function initUsageUI() { updateUsageUI(); }
 
   initUsageUI();
 
