@@ -22,6 +22,33 @@
     --flirt-bubble: #1a0010;
   }
 
+  body.light-mode {
+    --bg: #f5f5f0;
+    --surface: #ffffff;
+    --border: #e0e0e0;
+    --text: #1a1a1a;
+    --muted: #888;
+    --user-bubble: #e8e8ff;
+    --ai-bubble: #fff0f0;
+    --flirt-bubble: #ffe8f5;
+  }
+
+  body.light-mode body::before { opacity: 0.02; }
+
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .theme-toggle:hover { border-color: var(--text); color: var(--text); }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
@@ -580,7 +607,49 @@
   .btn-primary { background: var(--accent); border: none; border-radius: 4px; color: white; padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,59,59,0.4); transform: translateY(-1px); }
 
-  /* ---- PAYWALL ---- */
+  /* ---- USER PROFILE ---- */
+  .user-profile-row { display: flex; gap: 10px; align-items: center; width: 100%; }
+  .user-emoji-btn {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 1.6rem; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; transition: all 0.2s;
+  }
+  .user-emoji-btn:hover { border-color: #555; transform: scale(1.05); }
+  .user-name-input {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 12px 14px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  .user-name-input:focus { border-color: var(--accent); }
+  .user-name-input::placeholder { color: #444; font-style: italic; }
+
+  /* ---- EMOJI PICKER ---- */
+  .emoji-picker-btn {
+    background: transparent; border: 1px solid var(--border); border-radius: 4px;
+    width: 46px; height: 46px; font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .emoji-picker-btn:hover { border-color: #555; background: var(--surface); }
+
+  .emoji-panel {
+    position: absolute; bottom: 70px; left: 0; right: 0;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+    padding: 12px; display: none; flex-wrap: wrap; gap: 4px;
+    max-height: 200px; overflow-y: auto; z-index: 100;
+  }
+  .emoji-panel.open { display: flex; }
+  .emoji-panel button {
+    background: transparent; border: none; font-size: 1.4rem;
+    cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s;
+  }
+  .emoji-panel button:hover { background: #2a2a2a; }
+
+  .input-wrapper { position: relative; flex: 1; display: flex; flex-direction: column; }
+
+  /* ---- EMOJI PICKER ---- */
   .paywall-overlay {
     position: fixed;
     inset: 0;
@@ -881,6 +950,7 @@
     <div class="logo" id="logo-btn">BANTER<span>BOX</span></div>
     <div class="header-mode" id="header-mode"></div>
     <div style="display:flex;align-items:center;gap:12px;margin-left:auto">
+      <button class="theme-toggle" id="theme-toggle">🌙</button>
       <div class="score-badge" id="header-score" style="display:none">
         Round: <span class="score-num" id="round-score">0</span>/5
       </div>
@@ -971,7 +1041,11 @@
     <div class="flirt-messages" id="flirt-messages"></div>
     <div class="round-counter-flirt" id="flirt-round-counter">Message 1 of 15</div>
     <div class="flirt-input-area">
-      <textarea class="flirt-input" id="flirt-input" placeholder="Say something charming..." rows="1"></textarea>
+      <div class="input-wrapper">
+        <div class="emoji-panel" id="flirt-emoji-panel"></div>
+        <textarea class="flirt-input" id="flirt-input" placeholder="Say something charming..." rows="1"></textarea>
+      </div>
+      <button class="emoji-picker-btn" id="flirt-emoji-btn">😊</button>
       <button class="flirt-send-btn" id="flirt-send-btn">
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
@@ -1050,7 +1124,11 @@
     <div class="hype-messages" id="hype-messages"></div>
     <div class="hype-round-counter" id="hype-round-counter">Round 1 of 8</div>
     <div class="hype-input-area">
-      <textarea class="hype-input" id="hype-input" rows="1" placeholder="Tell them more..."></textarea>
+      <div class="input-wrapper">
+        <div class="emoji-panel" id="hype-emoji-panel"></div>
+        <textarea class="hype-input" id="hype-input" rows="1" placeholder="Tell them more..."></textarea>
+      </div>
+      <button class="emoji-picker-btn" id="hype-emoji-btn">😊</button>
       <button class="hype-send-btn" id="hype-send-btn">
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
@@ -1094,6 +1172,11 @@
       <div class="hero-title" id="hero-title"></div>
       <p class="hero-sub" id="hero-sub"></p>
       <div class="topic-form">
+        <div class="topic-label">Your name / alias</div>
+        <div class="user-profile-row">
+          <button class="user-emoji-btn" id="user-emoji-btn">😎</button>
+          <input class="user-name-input" id="user-name-input" type="text" placeholder="Enter your name or alias..." maxlength="20">
+        </div>
         <div class="topic-label" id="topic-label"></div>
         <textarea class="topic-input" id="topic-input" rows="3"></textarea>
         <div class="char-label">Choose your opponent</div>
@@ -1122,7 +1205,11 @@
       <div class="messages" id="messages"></div>
       <div class="round-counter" id="round-counter">Round 1 of 5</div>
       <div class="input-area">
-        <textarea class="chat-input" id="chat-input" rows="1"></textarea>
+        <div class="input-wrapper">
+          <div class="emoji-panel" id="chat-emoji-panel"></div>
+          <textarea class="chat-input" id="chat-input" rows="1"></textarea>
+        </div>
+        <button class="emoji-picker-btn" id="chat-emoji-btn">😊</button>
         <button class="send-btn" id="send-btn">
           <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
@@ -1234,7 +1321,11 @@
         { id: 'homeless', name: 'HOMELESS GUY', emoji: '&#129523;', style: "Surprisingly philosophical street wisdom. Occasionally poetic. Reference lived experiences that reframe the argument. Occasionally ask if the user has any spare change." },
         { id: 'crackhead', name: 'CRACK HEAD', emoji: '&#129323;', style: "Completely chaotic logic that jumps wildly between ideas. Occasionally say something accidentally profound then immediately undermine it. Hyperactive, go on tangents mid-sentence." },
         { id: 'teacher', name: 'SCHOOL TEACHER', emoji: '&#127822;', style: "Condescending school teacher. Ask the user to 'show their working'. Mark their points out of ten. Assign homework. Say 'now who can tell me why that is wrong?'" },
-        { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "Corporate buzzwords: 'circling back', 'bandwidth', 'moving the needle'. Passive-aggressively reference the user's performance. Never directly disagree — just performance-manage them out of the conversation." }
+        { id: 'boss', name: 'THE BOSS', emoji: '&#128188;', style: "Corporate buzzwords: 'circling back', 'bandwidth', 'moving the needle'. Passive-aggressively reference the user's performance. Never directly disagree — just performance-manage them out of the conversation." },
+        { id: 'teendaughter', name: 'TEEN DAUGHTER', emoji: '&#128149;', style: "You are a teenage daughter arguing with a parent. Everything is 'literally so embarrassing'. Use 'like', 'whatever', 'I literally can't even'. Reference TikTok. Roll your eyes constantly (describe it). Everything the user says is cringe. Frequently threaten to move to mum's/dad's." },
+        { id: 'teenage son', name: 'TEEN SON', emoji: '&#127918;', style: "You are a teenage son. One word answers where possible. 'Whatever.' 'Fine.' 'I don't care.' Occasionally reference gaming. Never fully engage. Make the user feel like arguing with a brick wall. Occasionally say something surprisingly logical then immediately go back to being disinterested." },
+        { id: 'karen', name: 'KAREN', emoji: '&#128081;', style: "You are Karen. You need to speak to the manager. You have NEVER been treated like this. You are a loyal customer/citizen and you DESERVE better. Use weaponised politeness — 'I don't mean to be rude BUT...'. Threaten to leave a review. Reference your rights constantly. Always ask for the manager. Escalate everything." },
+        { id: 'complaints', name: 'COMPLAINTS DEPT', emoji: '&#128222;', style: "You are a complaints department worker. Everything is a 'process'. Put the user on hold frequently (write 'Please hold... *elevator music*'). Transfer them to another department. Use scripted phrases: 'I understand your frustration', 'I can assure you...', 'Unfortunately our policy states...'. Solve absolutely nothing after maximum effort." }
       ],
       buildPrompt: function(topic, difficulty, character) {
         const d = { polite: 'Be respectful but persistent.', brutal: 'Be sharp, direct and relentless.', savage: 'Be utterly ruthless. Expose every flaw.' }[difficulty];
@@ -1275,7 +1366,132 @@
     flirt: { userGender: 'male', targetGender: 'female', character: null, diff: 'cheeky', round: 0, maxRounds: 15, flirtScore: 0, isLoading: false }
   };
 
-  // ---- HOME ----
+  // ---- THEME TOGGLE ----
+  const themeToggle = document.getElementById('theme-toggle');
+  let isLightMode = localStorage.getItem('bb_theme') === 'light';
+  if (isLightMode) { document.body.classList.add('light-mode'); themeToggle.textContent = '☀️'; }
+
+  themeToggle.addEventListener('click', function() {
+    isLightMode = !isLightMode;
+    document.body.classList.toggle('light-mode', isLightMode);
+    themeToggle.textContent = isLightMode ? '☀️' : '🌙';
+    localStorage.setItem('bb_theme', isLightMode ? 'light' : 'dark');
+  });
+
+  // ---- SOUND EFFECTS ----
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playSendSound() {
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
+      osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.2);
+    } catch(e) {}
+  }
+
+  function playReceiveSound() {
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1100, audioCtx.currentTime + 0.06);
+      osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+      osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.18);
+    } catch(e) {}
+  }
+
+  // ---- USER PROFILE ----
+  const USER_EMOJIS = ['😎','😊','😂','🤩','😏','😈','🤠','🥳','😤','🤔','👑','🔥','💪','🎭','🌟','🦁','🐺','🦊','🤖','👻','🎸','🏆','💀','🌈'];
+  let userEmoji = '😎';
+  let userName = 'You';
+
+  function buildEmojiPicker(panelId, inputId) {
+    const panel = document.getElementById(panelId);
+    const input = document.getElementById(inputId);
+    panel.innerHTML = '';
+    USER_EMOJIS.forEach(function(em) {
+      const btn = document.createElement('button');
+      btn.textContent = em;
+      btn.addEventListener('click', function() {
+        const pos = input.selectionStart;
+        const val = input.value;
+        input.value = val.slice(0, pos) + em + val.slice(pos);
+        input.focus();
+        input.selectionStart = input.selectionEnd = pos + em.length;
+        panel.classList.remove('open');
+      });
+      panel.appendChild(btn);
+    });
+  }
+
+  function setupEmojiBtn(btnId, panelId, inputId) {
+    buildEmojiPicker(panelId, inputId);
+    document.getElementById(btnId).addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.emoji-panel').forEach(function(p) {
+        if (p.id !== panelId) p.classList.remove('open');
+      });
+      document.getElementById(panelId).classList.toggle('open');
+    });
+  }
+
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.emoji-panel').forEach(function(p) { p.classList.remove('open'); });
+  });
+
+  setupEmojiBtn('chat-emoji-btn', 'chat-emoji-panel', 'chat-input');
+  setupEmojiBtn('flirt-emoji-btn', 'flirt-emoji-panel', 'flirt-input');
+  setupEmojiBtn('hype-emoji-btn', 'hype-emoji-panel', 'hype-input');
+
+  // User emoji picker on setup screen
+  const USER_AVATAR_EMOJIS = ['😎','😊','😂','🤩','😏','😈','🤠','🥳','😤','🤔','👑','🔥','💪','🎭','🌟','🦁','🐺','🦊','🤖','👻','🎸','🏆','💀','🌈','🧑','👦','👧','🧔','👩','🧑‍💻','🥷','🕵️'];
+
+  // Create avatar picker popup
+  const avatarPickerEl = document.createElement('div');
+  avatarPickerEl.style.cssText = 'position:fixed;z-index:2000;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px;display:none;flex-wrap:wrap;gap:6px;max-width:280px;';
+  USER_AVATAR_EMOJIS.forEach(function(em) {
+    const btn = document.createElement('button');
+    btn.textContent = em;
+    btn.style.cssText = 'background:transparent;border:none;font-size:1.6rem;cursor:pointer;padding:4px;border-radius:6px;';
+    btn.addEventListener('mouseover', function() { btn.style.background = '#2a2a2a'; });
+    btn.addEventListener('mouseout', function() { btn.style.background = 'transparent'; });
+    btn.addEventListener('click', function() {
+      userEmoji = em;
+      document.getElementById('user-emoji-btn').textContent = em;
+      avatarPickerEl.style.display = 'none';
+    });
+    avatarPickerEl.appendChild(btn);
+  });
+  document.body.appendChild(avatarPickerEl);
+
+  document.getElementById('user-emoji-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const rect = e.target.getBoundingClientRect();
+    avatarPickerEl.style.display = 'flex';
+    avatarPickerEl.style.top = (rect.bottom + 8) + 'px';
+    avatarPickerEl.style.left = rect.left + 'px';
+  });
+
+  document.addEventListener('click', function() { avatarPickerEl.style.display = 'none'; });
+
+  // Also add user profile row to flirt and hype setup
+  function getUserName() {
+    const input = document.getElementById('user-name-input');
+    return (input && input.value.trim()) ? input.value.trim() : 'You';
+  }
+
+
   document.querySelectorAll('.mode-card:not(.coming-soon)').forEach(function(card) {
     card.addEventListener('click', function() { loadMode(card.dataset.mode); });
   });
@@ -1383,6 +1599,8 @@
   async function startGame() {
     const topic = document.getElementById('topic-input').value.trim();
     if (!topic) return;
+    userName = getUserName();
+    userEmoji = document.getElementById('user-emoji-btn').textContent || '😎';
     state.topic = topic; state.messages = []; state.round = 0;
     document.getElementById('landing').style.display = 'none';
     document.getElementById('verdict-screen').style.display = 'none';
@@ -1424,9 +1642,11 @@
       if (aiText.includes('---VERDICT---')) {
         const parts = aiText.split('---VERDICT---');
         if (parts[0].trim()) { addMessage('ai', parts[0].trim()); state.messages.push({ role: 'assistant', content: parts[0].trim() }); }
+        playReceiveSound();
         setTimeout(function() { showVerdict(parts[1]); }, 1200);
       } else {
         addMessage('ai', aiText);
+        playReceiveSound();
         state.messages.push({ role: 'assistant', content: aiText });
       }
     } catch(e) { typingEl.remove(); addMessage('ai', "Connection dropped."); }
@@ -1438,7 +1658,7 @@
   function addMessage(role, text) {
     const el = document.createElement('div');
     el.className = 'message ' + role;
-    el.innerHTML = '<div class="avatar">' + (role === 'user' ? '&#128100;' : state.character.emoji) + '</div><div class="bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+    el.innerHTML = '<div class="avatar">' + (role === 'user' ? userEmoji : state.character.emoji) + '</div><div class="bubble">' + text.replace(/\n/g,'<br>') + '</div>';
     document.getElementById('messages').appendChild(el);
     el.scrollIntoView({ behavior: 'smooth', block: 'end' });
     return el;
@@ -1467,6 +1687,7 @@
     const text = input.value.trim();
     if (!text || state.isLoading) return;
     input.value = ''; input.style.height = 'auto';
+    playSendSound();
     sendToAI(text);
   }
 
@@ -1581,7 +1802,7 @@
       '- Keep it flirty, fun and respectful at all times\n' +
       '- Never produce explicit, sexual or inappropriate content\n' +
       '- If the user says anything inappropriate, offensive or tries to push explicit content, respond with something like "Whoa, let\'s keep it classy 😏" and redirect\n' +
-      '- After each response, on a new line add: FLIRT_SCORE:[number 0-100] based on how charming their last message was\n' +
+      '- After EVERY response without exception, on a new line add exactly: FLIRT_SCORE:[number 0-100] based on how charming their last message was. Example: FLIRT_SCORE:72\n' +
       '- After 15 messages (when asked), give a final verdict:\n\n' +
       '---FLIRT_VERDICT---\nSCORE: [0-100]\nLABEL: [e.g. "Smooth Operator" or "Crash & Burn" or "Hidden Gem" or "Adorably Awkward"]\nSUMMARY: [2-3 sentences in character about how the flirt session went]\nEMOJI: [single emoji that sums it up]';
   }
@@ -1641,14 +1862,19 @@
         if (reply) { addFlirtMessage('them', reply); state.flirt.messages.push({ role: 'assistant', content: parts[0] }); }
         setTimeout(function() { showFlirtVerdict(parts[1]); }, 1500);
       } else {
-        const scoreMatch = aiText.match(/FLIRT_SCORE:(\d+)/);
-        if (scoreMatch && !isOpener) {
+        const scoreMatch = aiText.match(/FLIRT_SCORE[:\s]+(\d+)/i);
+        if (scoreMatch) {
           const newScore = Math.min(100, Math.max(0, parseInt(scoreMatch[1])));
-          state.flirt.flirtScore = Math.round((state.flirt.flirtScore * 0.6) + (newScore * 0.4));
+          if (isOpener) {
+            state.flirt.flirtScore = newScore;
+          } else {
+            state.flirt.flirtScore = Math.round((state.flirt.flirtScore * 0.5) + (newScore * 0.5));
+          }
           updateFlirtMeter(state.flirt.flirtScore);
         }
         const reply = extractFlirtReply(aiText);
         addFlirtMessage('them', reply);
+        playReceiveSound();
         state.flirt.messages.push({ role: 'assistant', content: aiText });
       }
     } catch(e) { typingEl.remove(); addFlirtMessage('them', "Hey, you still there? 😊"); }
@@ -1667,7 +1893,7 @@
     el.className = 'flirt-msg ' + who;
     const now = new Date();
     const time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-    el.innerHTML = '<div class="flirt-bubble">' + text.replace(/\n/g,'<br>') + '</div><div class="flirt-timestamp">' + time + '</div>';
+    el.innerHTML = '<div class="flirt-bubble">' + text.replace(/\n/g,'<br>') + '</div><div class="flirt-timestamp">' + (who === 'me' ? (userEmoji + ' ') : '') + time + '</div>';
     document.getElementById('flirt-messages').appendChild(el);
     el.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
@@ -1701,6 +1927,7 @@
     const text = input.value.trim();
     if (!text || state.flirt.isLoading) return;
     input.value = ''; input.style.height = 'auto';
+    playSendSound();
     sendFlirtMessage(text);
   }
 
@@ -1863,6 +2090,7 @@
         setTimeout(function() { showHypeVerdict(parts[1]); }, 1200);
       } else {
         addHypeMessage('ai', aiText);
+        playReceiveSound();
         state.hype.messages.push({ role: 'assistant', content: aiText });
       }
     } catch(e) { typingEl.remove(); addHypeMessage('ai', "You've got this. Keep going."); }
@@ -1875,7 +2103,7 @@
   function addHypeMessage(role, text) {
     const el = document.createElement('div');
     el.className = 'hype-message ' + role;
-    el.innerHTML = '<div class="hype-avatar">' + (role === 'user' ? '&#128100;' : state.hype.character.emoji) + '</div><div class="hype-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+    el.innerHTML = '<div class="hype-avatar">' + (role === 'user' ? userEmoji : state.hype.character.emoji) + '</div><div class="hype-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
     document.getElementById('hype-messages').appendChild(el);
     el.scrollIntoView({ behavior: 'smooth', block: 'end' });
     return el;
@@ -1905,6 +2133,7 @@
     const text = input.value.trim();
     if (!text || state.hype.isLoading) return;
     input.value = ''; input.style.height = 'auto';
+    playSendSound();
     sendHypeMessage(text);
   }
 
